@@ -40,11 +40,22 @@ class ProfileController extends AppController
      */
     public function view($id = null)
     {
-        $profile = $this->Profile->get($id, [
-            'contain' => ['Photos', 'Users']
-        ]);
+        if ($this->Auth->user('role') == "admin") {
+            $profile = $this->Profile->get($id, [
+                'contain' => ['Photos', 'Users']
+            ]);
+        } else {
+            $profile = $this->Profile->find('all', [
+                'conditions' => ['user_id' => $this->Auth->user('id')],
+                'contain' => ['Photos', 'Users']
+            ]);
+        }
+        
 
-        $this->set('profile', $profile);
+        $this->set([
+            "profile" => $profile,
+            "_serialize" => ['profile']
+        ]);
     }
 
     /**
@@ -78,9 +89,17 @@ class ProfileController extends AppController
      */
     public function edit($id = null)
     {
-        $profile = $this->Profile->get($id, [
-            'contain' => []
-        ]);
+        if ($this->Auth->user('role') == "admin") {
+            $profile = $this->Profile->get($id, [
+                "contain" => ['Users', 'Photos']
+            ]);
+        } else {
+            $profile = $this->Profile->find('all', [
+                'contain' => ['Users', 'Photos'],
+                'conditions' => ['user_id' => $this->Auth->user('id')]
+            ])->first();
+        }
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
             $profile = $this->Profile->patchEntity($profile, $this->request->getData());
             if ($this->Profile->save($profile)) {

@@ -15,43 +15,83 @@
 
 $cakeDescription = 'CakePHP: the rapid development php framework';
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <?= $this->Html->charset() ?>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <?= $cakeDescription ?>:
-        <?= $this->fetch('title') ?>
-    </title>
-    <?= $this->Html->meta('icon') ?>
+    <!DOCTYPE html>
+    <html>
 
-    <?= $this->Html->css('base.css') ?>
-    <?= $this->Html->css('cake.css') ?>
+    <head>
+        <?= $this->Html->charset() ?>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>
+                    Dashboard: 
+                    <?= $this->fetch('title') ?>
+            </title>
+            <?= $this->Html->meta('icon') ?>
 
-    <?= $this->fetch('meta') ?>
-    <?= $this->fetch('css') ?>
-    <?= $this->fetch('script') ?>
-</head>
-<body>
-    <nav class="top-bar expanded" data-topbar role="navigation">
-        <ul class="title-area large-3 medium-4 columns">
-            <li class="name">
-                <h1><a href=""><?= $this->fetch('title') ?></a></h1>
-            </li>
-        </ul>
-        <div class="top-bar-section">
-            <ul class="right">
-                <li><a target="_blank" href="https://book.cakephp.org/3.0/">Documentation</a></li>
-                <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>
-            </ul>
-        </div>
-    </nav>
+
+
+                        <?= $this->fetch('meta') ?>
+                        <?= $this->fetch('css') ?>
+                        <?= $this->fetch('script') ?>
+                        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+                        <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.5"></script>
+                        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+                        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+                        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+                        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.9/dialog-polyfill.min.css">
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.9/dialog-polyfill.min.js"></script>
+    </head>
+
+    <body>
+    <?php //debug($user); ?>
     <?= $this->Flash->render() ?>
-    <div class="container clearfix">
-        <?= $this->fetch('content') ?>
-    </div>
-    <footer>
-    </footer>
-</body>
-</html>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <!-- Title -->
+                    <span class="mdl-layout-title">
+                        <?= $this->fetch('title') ?>
+                    </span>
+                    <!-- Add spacer, to align navigation to the right -->
+                    <div class="mdl-layout-spacer"></div>
+                    <!-- Navigation. We hide it in small screens. -->
+                    <nav class="mdl-navigation mdl-layout--large-screen-only">
+                        <a class="mdl-navigation__link" href=""> <?= $user['username'] ?></a>
+                        
+                    </nav>
+                </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title"><?= $this->fetch('title') ?></span>
+                <nav class="mdl-navigation">
+                        <?=
+                            $this->Html->link(
+                                'Perfil',
+                                '/profile/edit',
+                                ['class' => 'mdl-navigation__link']
+                            );
+                        ?>
+
+                        <?=
+                            $this->Html->link(
+                                'Reservas',
+                                '/reservations',
+                                ['class' => 'mdl-navigation__link']
+                            );
+                        ?>
+                </nav>
+            </div>
+            <main class="mdl-layout__content">
+                <div class="page-content container clearfix">
+                    <?= $this->fetch('content') ?>
+                </div>
+                
+            </main>
+        </div>
+
+        <footer>
+        </footer>
+    </body>
+
+    </html>
+

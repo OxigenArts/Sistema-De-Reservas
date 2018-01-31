@@ -57,7 +57,7 @@ class AppController extends Controller
             'authError' => 'Did you really think you are allowed to see that?',
             'loginRedirect' => [
             'controller' => 'users',
-            'action' => 'home'
+            'action' => 'index'
             ],
             'logoutRedirect' => [
             'controller' => 'users',
@@ -87,5 +87,9 @@ class AppController extends Controller
     {
        // parent::beforeFilter($event);
         $this->Auth->allow(['login', 'view', 'display']);
+
+        $this->set([
+            'user' => $this->Auth->user()
+        ]);
     }
 }

@@ -24,7 +24,7 @@ class UsersController extends AppController
             'contain' => ['Category', 'Subcategory']
         ];
         $users = $this->paginate($this->Users);
-        debug($users);
+        //debug($users);
         $this->set(compact('users'));
     }
 
@@ -67,6 +67,7 @@ class UsersController extends AppController
     }
     public function login()
     {
+        $this->viewBuilder()->setLayout(false);
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {

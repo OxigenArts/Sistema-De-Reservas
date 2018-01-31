@@ -92,10 +92,7 @@ class ReservationController extends AppController
             }
             
         }
-        $this->set([
-            "reservation" => $reservation,
-            "_serialize" => "reservation"
-        ]);
+        $this->set(['reservation' => $reservation, '_serialize' => 'reservation']);
     }
 
     /**

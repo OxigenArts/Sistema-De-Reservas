@@ -25,7 +25,7 @@ class UsersController extends AppController
         ];
         $users = $this->paginate($this->Users);
         //debug($users);
-        $this->set(compact('users'));
+        $this->set(['users' => $users, '_serialize' => 'users']);
     }
 
     /**

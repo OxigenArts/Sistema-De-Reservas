@@ -19,9 +19,18 @@ class CategoryController extends AppController
      */
     public function index()
     {
-        $category = $this->paginate($this->Category);
+        if($this->Auth->user('role')  == 'admin'){
+            $category = $this->Category->find('all');
+        }else{
+            $category = $this->Category->find('all',
+                ['conditions' => ['id' => $this->Auth->user('category_id')]]
+            );
+        }
 
-        $this->set(compact('category'));
+        
+        $this->set(['category' => $category,
+            '_serialize' => 'category'
+    ]);
     }
 
     /**
@@ -68,7 +77,11 @@ class CategoryController extends AppController
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null)
-    {
+    {   if($this->Auth->user('role') != 'admin'){
+        $id = $this->Auth->user('category_id');
+    }
+        
+
         $category = $this->Category->get($id, [
             'contain' => []
         ]);
@@ -81,7 +94,9 @@ class CategoryController extends AppController
             }
             $this->Flash->error(__('The category could not be saved. Please, try again.'));
         }
-        $this->set(compact('category'));
+        $this->set(['category' => $category,
+            '_serialize' => 'category'
+    ]);
     }
 
     /**
@@ -91,8 +106,9 @@ class CategoryController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete()
     {
+        $id = $this->Auth->user('category_id');
         $this->request->allowMethod(['post', 'delete']);
         $category = $this->Category->get($id);
         if ($this->Category->delete($category)) {

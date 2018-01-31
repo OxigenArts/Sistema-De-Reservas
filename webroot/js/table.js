@@ -9,17 +9,18 @@ var table = new Vue({
     },
     methods: {
         refreshTable: function() {
-            this.$http.get('../reservation.json').then(function(response) {
-                this.tabledata = response.body[this.elname];
-                this.tabledata.forEach(function(item, index) {
-                    if (item.json) item.json = JSON.parse(item.json);
-                });
+            this.$http.get('reservation.json').then(function(response) {
+                console.log(response);
+                this.tabledata = response.body;
+                /*this.tabledata.forEach(function(item, index) {
+                    if (item.name) item.name = JSON.parse(item.name);
+                });*/
             });
 
         },
         delete: function(id) {
             console.log("trying to delete id "+id);
-            this.$http.delete("../reservation/delete/"+id+".json").then(function(response) {
+            this.$http.delete("reservation/delete/"+id+".json").then(function(response) {
                 this.refreshTable();
                 console.log(response);
             }, function(err) {
@@ -28,14 +29,14 @@ var table = new Vue({
         },
         accept: function(id) {
             console.log("trying to set status of "+id);
-            this.$http.post("../reservation/setstatus/"+id+".json", {status: 'accepted'}).then(function(response) {
+            this.$http.post("reservation/setstatus/"+id+".json", {status: 'accepted'}).then(function(response) {
                 console.log(response.body);
                 this.refreshTable();
             })
         },
         dismiss: function(id) {
             console.log("trying to set status of "+id);
-            this.$http.post("../reservation/setstatus/"+id+".json", {status: 'rejected'}).then(function(response) {
+            this.$http.post("reservation/setstatus/"+id+".json", {status: 'rejected'}).then(function(response) {
                 console.log(response.body);
                 this.refreshTable();
             })

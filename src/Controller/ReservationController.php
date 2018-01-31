@@ -21,11 +21,12 @@ class ReservationController extends AppController
     {
         
         $reservations = $this->Reservation->find('all', [
-            'conditions' => ['user_id' => $this->Auth->user('id')],
-            'contain' => ['User']
+            'conditions' => ['user_id' => $this->Auth->user('id')]
         ]);
 
-        $this->set(['reservation' => $reservations, '_serialize' => 'reservations']);
+        //debug();
+
+        $this->set(['reservation' => $reservations, '_serialize' => 'reservation']);
     }
 
     /**
@@ -120,12 +121,12 @@ class ReservationController extends AppController
             'contain' => []
         ]);
 
-
+        $data = $this->request->getData();
         if ($this->request->is(['patch', 'post', 'put']) && $this->request->getData()["status"]) {
-            $date = $this->Date->patchEntity($date, $this->request->getData());
-            $date->status = $this->Reservation->getData()["status"];
+            $date = $this->Reservation->patchEntity($date, $this->request->getData());
             if ($this->Auth->user('id') == $date->user_id || $this->Auth->user('role') == "admin") {
-                if ($this->Date->save($date)) {
+                if ($this->Reservation->save($date)) {
+                    
                     $this->Flash->success(__('La reserva ha sido aceptada.'));
                 } else {
                     $this->Flash->error(__('La reserva no pudo ser aceptada, intentelo denuevo.'));

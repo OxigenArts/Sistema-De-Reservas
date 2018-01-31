@@ -54,7 +54,7 @@ class UsersController extends AppController
         $user = $this->Users->newEntity();
         $nuevaFoto = $this->Photos->newEntity();
         //$photo = $this->Photos->find('all')->first();
-        $nuevaFoto->url = 'kabmsgnsd';
+        $nuevaFoto->url = 'img/users/user-placeholder.png';
         
                 
         if ($this->request->is('post')) {

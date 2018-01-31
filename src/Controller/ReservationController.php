@@ -19,6 +19,11 @@ class ReservationController extends AppController
      */
     public function index()
     {
+        
+        $this->paginate = [
+            "conditions" => ['user_id' => $this->Auth->user('id')]
+        ];
+        
         $reservation = $this->paginate($this->Reservation);
 
         $this->set(['reservation' => $reservation, '_serialize' => 'reservation']);

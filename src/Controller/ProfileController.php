@@ -61,7 +61,7 @@ class ProfileController extends AppController
         
 
         $this->set([
-            "profile" => $profile,
+            "profile" => $profile->first(),
             "_serialize" => ['profile']
         ]);
     }

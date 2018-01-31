@@ -20,10 +20,16 @@ class FormsController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Users']
+        /*$this->paginate = [
+            'contain' => ['Users'],
         ];
         $forms = $this->paginate($this->Forms);
+        */
+        
+        $forms = $this->Forms->find('all', [
+            'contain' => ['Users'],
+            'conditions' => ['user_id' => $this->Auth->user('id')]
+        ]);
 
         $this->set(compact('forms'));
     }

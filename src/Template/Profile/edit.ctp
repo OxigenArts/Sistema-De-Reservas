@@ -20,9 +20,12 @@
         <div class="mdl-cell mdl-cell--6-col">
             <h6>Descripción del perfil</h6>
             <div class="mdl-textfield mdl-js-textfield">
-                <textarea class="mdl-textfield__input" type="text" rows="6" id="desc"></textarea>
+                <textarea class="mdl-textfield__input" type="text" rows="6" id="desc" v-model="profile_data.description"></textarea>
                 <label class="mdl-textfield__label" for="desc">Descripción del perfil</label>
             </div>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" @click="save()">
+                Guardar
+            </button>
         </div>
 
         <div class="mdl-cell mdl-cell--6-col">

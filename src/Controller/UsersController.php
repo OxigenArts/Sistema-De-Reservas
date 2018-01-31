@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-
+use Cake\Datasource\EntityInterface;
 /**
  * Users Controller
  *
@@ -50,21 +50,30 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add()
-    {
+    {   $this->loadModel('Photos');
         $user = $this->Users->newEntity();
+        ///$photo = $this->Photos->newEntity();
+        //$photo = $this->Photos->find('all')->first();
+        //$photo->url = 'kabmsgnsd';
+                    //debug($this->Photos->save($photo));
+                
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                    
+                    
+                //return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $category = $this->Users->Category->find('list', ['limit' => 200]);
-        $subcategories = $this->Users->Subcategories->find('list', ['limit' => 200]);
+        $subcategories = $this->Users->Subcategory->find('list', ['limit' => 200]);
         $this->set(compact('user', 'category', 'subcategories'));
     }
+
+
     public function login()
     {
         $this->viewBuilder()->setLayout(false);

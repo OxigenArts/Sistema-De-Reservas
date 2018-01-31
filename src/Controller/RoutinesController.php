@@ -21,7 +21,7 @@ class RoutinesController extends AppController
     {
         $routines = $this->paginate($this->Routines);
 
-        $this->set(compact('routines'));
+        $this->set(['routines' => $routines, '_serialize' => 'routines']);
     }
 
     /**

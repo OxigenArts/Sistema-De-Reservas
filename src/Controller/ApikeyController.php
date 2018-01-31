@@ -19,13 +19,24 @@ class ApikeyController extends AppController
      * @return \Cake\Http\Response|void
      */
     public function index()
-    {
+    {	$this->loadModel('Profile');
+    	$this->loadModel('Forms');
         $this->paginate = [
             'contain' => ['Users']
         ];
+        $profile = '';
+        $forms = '';
         $apikey = $this->paginate($this->Apikey);
-        $users = $this->Apikey->Users->find('all', ['limit' => 200]);
-        $this->set(['apikey' => $apikey, '_serialize' => 'apikey'//, 'users' => $users, '_serialize' => 'users'
+        if($this->Auth->user('role') == 'admin'){
+        	$users = $this->Apikey->Users->find('all', ['limit' => 200]);
+        }else{
+        	$users = $this->Apikey->Users->find('all', ['conditions' => ['user_id' => $this->Auth->user('id')]]);
+        	$profile = $this->Profile->find('all', ['conditions' => ['user_id' => $this->Auth->user('id')]]);
+        	$forms = $this->Forms->find('all', ['conditions' => ['user_id' => $this->Auth->user('id')]]);
+        }
+        debug($profile);
+        
+        $this->set(['apikey' => $apikey, '_serialize' => 'apikey', 'users' => $users, '_serialize' => 'users', 'profile' => $profile, '_serialize' => 'profile', 'forms' => $forms, '_serialize' => 'forms'
     ]);
     }
 

@@ -97,14 +97,14 @@ class ProfileController extends AppController
      */
     public function edit($id = null)
     {
-        if ($this->Auth->user('role') == "admin") {
+        if ($this->Auth->user('role') == "admin" && id != null) {
             $profile = $this->Profile->get($id, [
                 "contain" => ['Users', 'Photos']
             ]);
         } else {
             $profile = $this->Profile->find('all', [
                 'contain' => ['Users', 'Photos'],
-                'conditions' => ['user_id' => $this->Auth->user('id')]
+                'conditions' => ['profile.user_id' => $this->Auth->user('id')]
             ])->first();
         }
         
@@ -143,4 +143,33 @@ class ProfileController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+    
+
+    public function uploadprofilephoto() {
+        $this->loadModel("Photos");
+        if ($this->request->is('post')) {
+            $rData = $this->request->getData();
+            if (move_uploaded_file($rData['url']['tmp_name'], WWW_ROOT . "img/users/".$rData['url']['name'])) {
+
+                $userProfile = $this->Profile->find("all", [
+                    "conditions" => ["profile.user_id" => $this->Auth->user('id')],
+                    "contain" => ['Photos']
+                ])->first();
+                
+                $userProfile->photo->url = "img/users/".$rData['url']['name'];
+
+                $this->Profile->save($userProfile);
+                $this->Photos->save($userProfile->photo);
+            }
+            
+        }
+
+        $this->set([
+            'data' => $userProfile->photo,
+            '_serialize' => ['data']
+        ]);
+        
+
+    }
+    
 }

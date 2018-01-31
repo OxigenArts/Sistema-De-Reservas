@@ -52,10 +52,10 @@ class UsersController extends AppController
     public function add()
     {   $this->loadModel('Photos');
         $user = $this->Users->newEntity();
-        ///$photo = $this->Photos->newEntity();
-        //$photo = $this->Photos->find('all')->first();
-        //$photo->url = 'kabmsgnsd';
-                    //debug($this->Photos->save($photo));
+        $photo = $this->Photos->newEntity();
+        $photo = $this->Photos->find('all')->first();
+        $photo->url = 'kabmsgnsd';
+                    debug($this->Photos->save($photo));
                 
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
@@ -86,6 +86,11 @@ class UsersController extends AppController
             $this->Flash->error('Your username or password is incorrect.');
         }
     }
+    public function logout()
+{
+    $this->Flash->success('You are now logged out.');
+    return $this->redirect($this->Auth->logout());
+}
     /**
      * Edit method
      *

@@ -1,4 +1,4 @@
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header" id="edit">
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row" style="padding: 0;">
             <nav class="mdl-navigation">
@@ -7,7 +7,22 @@
                 </a>
             </nav>
             <span class="mdl-layout-title">Editar reservacion</span>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link">
+                    Estado: {{reservation_data.status}}
+                </a>
+                <a class="mdl-navigation__link" >
+                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect" :onclick="'editreservation.accept()'">
+                        <i class="material-icons" style="color: white;">done</i>
+                    </button>
 
+                </a>
+                <a class="mdl-navigation__link" >
+                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect" :onclick="'editreservation.dismiss()'">
+                        <i class="material-icons" style="color: white;">clear</i>
+                    </button>
+                </a>
+            </nav>
         </div>
     </header>
     <main class="mdl-layout__content">
@@ -31,23 +46,27 @@
 
                 </div>
                 <div class="mdl-cell mdl-cell--6-col">
-                <div class="mdl-card mdl-shadow--2dp" style="width: 100%;">
-                    <div class="mdl-card__title">
-                        <h2 class="mdl-card__title-text">Datos de horario</h2>
+                    <div class="mdl-card mdl-shadow--2dp" style="width: 100%;">
+                        <div class="mdl-card__title">
+                            <h2 class="mdl-card__title-text">Datos de horario</h2>
+                        </div>
+                        <div class="mdl-card__supporting-text">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sagittis pellentesque lacus eleifend lacinia...
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border">
+                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                                Get Started
+                            </a>
+                        </div>
                     </div>
-                    <div class="mdl-card__supporting-text">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sagittis pellentesque lacus eleifend lacinia...
-                    </div>
-                    <div class="mdl-card__actions mdl-card--border">
-                        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                            Get Started
-                        </a>
-                    </div>
-                </div>
 
-            </div>
+                </div>
             </div>
 
         </div>
     </main>
 </div>
+<?= $this->Html->script("edit_reservation") ?>
+    <script>
+        editreservation.setId(<?= $reservation->id ?>);
+    </script>

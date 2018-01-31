@@ -1,17 +1,7 @@
 <?= $this->Html->css('date') ?>
-<dialog class="mdl-dialog">
-    <h4 class="mdl-dialog__title">Allow data collection?</h4>
-    <div class="mdl-dialog__content">
-      <p>
-        Allowing us to collect data will let us get you the information you want faster.
-      </p>
-    </div>
-    <div class="mdl-dialog__actions">
-      <button type="button" class="mdl-button">Agree</button>
-      <button type="button" class="mdl-button close">Disagree</button>
-    </div>
-  </dialog>
-    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" id="table">
+<div>
+
+<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%;" id="table">
         <thead>
             <tr>
                 <th>Identificador</th>
@@ -24,7 +14,7 @@
             <tr v-for="date in tabledata">
                 <td>{{date.id}}</td>
                 <td>
-                    <p v-for="(value, key) in date.json">
+                    <p v-for="(value, key) in date.name">
                         <span class="mdl-chip" :id="date.id+key">
                             <span class="mdl-chip__text">{{key}} ({{value}})</span>
                         </span>
@@ -53,10 +43,9 @@
             </tr>
         </tbody>
     </table>
+</div>
+    
 
     <?= $this->Html->script('table') ?>
-        <script>
-            table.elname = "reservation";
 
-        </script>
 

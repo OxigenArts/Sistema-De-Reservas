@@ -139,33 +139,26 @@ class ProfileController extends AppController
 
     public function uploadprofilephoto() {
         $this->loadModel("Photos");
-        $newPhoto = $this->Photos->newEntity();
         if ($this->request->is('post')) {
             $rData = $this->request->getData();
             if (move_uploaded_file($rData['url']['tmp_name'], WWW_ROOT . "img/users/".$rData['url']['name'])) {
-                $newPhoto->url = "img/users/".$rData['url']['name'];
-                $photoId = $this->Photos->save($newPhoto);
 
-                $userProfileId = $this->Profile->find("all", [
-                    "conditions" => ["profile.user_id" => $this->Auth->user('id')]
-                ])->first()->id;
-
-                $userProfile = $this->Profile->get($userProfileId, [
-                    "contain" => ["Users"]
-                ]);
+                $userProfile = $this->Profile->find("all", [
+                    "conditions" => ["profile.user_id" => $this->Auth->user('id')],
+                    "contain" => ['Photos']
+                ])->first();
                 
-                $userProfile->photo_id = $photoId->id;
+                $userProfile->photo->url = "img/users/".$rData['url']['name'];
 
                 $this->Profile->save($userProfile);
+                $this->Photos->save($userProfile->photo);
             }
             
         }
 
         $this->set([
-            'test' => ['Hello'],
-            'data' => $this->request->getData(),
-            'newPhoto' => $newPhoto,
-            '_serialize' => ['data', 'test']
+            'data' => $userProfile->photo,
+            '_serialize' => ['data']
         ]);
         
 

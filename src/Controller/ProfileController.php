@@ -24,10 +24,18 @@ class ProfileController extends AppController
             'conditions' => ['Profile.user_id' => $this->Auth->user('id')],
             'contain' => ['Photos']
         ];
+        $photo = [];
         $profile = $this->paginate($this->Profile);
-
+        foreach ($profile as $key) {
+            if($key->user_id = $this->Auth->user('id')){
+                array_push($photo, $key->photo->url);
+            }
+        }
+        debug($key->photo->url);
         $this->set(['profile' => $profile,
-            '_serialize' => 'profile'
+            '_serialize' => 'profile',
+            'photos' => $photo,
+            '_serialize' => 'photos'
     ]);
     }
 

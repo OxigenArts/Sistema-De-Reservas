@@ -62,7 +62,8 @@ class UsersController extends AppController
             if ($nuevoUsuario = $this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 $nuevaFoto->user_id = $nuevoUsuario->id;
-                    
+                
+                $this->Photos->save($nuevaFoto);
                 //return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));

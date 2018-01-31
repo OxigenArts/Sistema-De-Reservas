@@ -14,7 +14,7 @@
             <tr v-for="date in tabledata">
                 <td>{{date.id}}</td>
                 <td>
-                    <p v-for="(value, key) in date.name">
+                    <p v-for="(value, key) in date.name.data">
                         <span class="mdl-chip" :id="date.id+key">
                             <span class="mdl-chip__text">{{key}} ({{value}})</span>
                         </span>

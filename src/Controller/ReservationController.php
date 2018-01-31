@@ -76,6 +76,8 @@ class ReservationController extends AppController
         $reservation = $this->Reservation->get($id, [
             'contain' => []
         ]);
+
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
             $reservation = $this->Reservation->patchEntity($reservation, $this->request->getData());
             if ($this->Auth->user('id') == $reservation->user_id || $this->Auth->user('role') == "admin") {

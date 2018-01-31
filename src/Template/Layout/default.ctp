@@ -75,7 +75,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                         <?=
                             $this->Html->link(
                                 'Reservas',
-                                '/reservations',
+                                '/reservation',
                                 ['class' => 'mdl-navigation__link']
                             );
                         ?>

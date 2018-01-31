@@ -20,13 +20,12 @@ class ReservationController extends AppController
     public function index()
     {
         
-        $this->paginate = [
-            "conditions" => ['user_id' => $this->Auth->user('id')]
-        ];
-        
-        $reservation = $this->paginate($this->Reservation);
+        $reservations = $this->Reservation->find('all', [
+            'conditions' => ['user_id' => $this->Auth->user('id')],
+            'contain' => ['User']
+        ]);
 
-        $this->set(['reservation' => $reservation, '_serialize' => 'reservation']);
+        $this->set(['reservation' => $reservations, '_serialize' => 'reservations']);
     }
 
     /**
@@ -58,7 +57,6 @@ class ReservationController extends AppController
             if ($this->Reservation->save($reservation)) {
                 $this->Flash->success(__('The reservation has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The reservation could not be saved. Please, try again.'));
         }
@@ -79,12 +77,16 @@ class ReservationController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $reservation = $this->Reservation->patchEntity($reservation, $this->request->getData());
-            if ($this->Reservation->save($reservation)) {
-                $this->Flash->success(__('The reservation has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+            if ($this->Auth->user('id') == $reservation->user_id || $this->Auth->user('role') == "admin") {
+                if ($this->Reservation->save($reservation)) {
+                    $this->Flash->success(__('The reservation has been saved.'));
+                } else {
+                    $this->Flash->error(__('The reservation could not be saved. Please, try again.'));
+                }
+            } else {
+                $this->Flash->error(__('The reservation could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The reservation could not be saved. Please, try again.'));
+            
         }
         $this->set(compact('reservation'));
     }
@@ -100,12 +102,45 @@ class ReservationController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $reservation = $this->Reservation->get($id);
-        if ($this->Reservation->delete($reservation)) {
-            $this->Flash->success(__('The reservation has been deleted.'));
+        if ($this->Auth->user('id') == $reservation->user_id || $this->Auth->user('role') == "admin") {
+            if ($this->Reservation->delete($reservation)) {
+                $this->Flash->success(__('The reservation has been deleted.'));
+            } else {
+                $this->Flash->error(__('The reservation could not be deleted. Please, try again.'));
+            }
         } else {
             $this->Flash->error(__('The reservation could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
     }
+
+    public function setStatus($id = null)
+    {
+        $date = $this->Reservation->get($id, [
+            'contain' => []
+        ]);
+
+
+        if ($this->request->is(['patch', 'post', 'put']) && $this->request->getData()["status"]) {
+            $date = $this->Date->patchEntity($date, $this->request->getData());
+            $date->status = $this->Reservation->getData()["status"];
+            if ($this->Auth->user('id') == $date->user_id || $this->Auth->user('role') == "admin") {
+                if ($this->Date->save($date)) {
+                    $this->Flash->success(__('La reserva ha sido aceptada.'));
+                } else {
+                    $this->Flash->error(__('La reserva no pudo ser aceptada, intentelo denuevo.'));
+                }
+            } else {
+                $this->Flash->error(__('La reserva no pudo ser aceptada, intentelo denuevo.'));
+            }
+            
+            
+        }
+        $this->set([
+            'data' => $data,
+            'date' => $date,
+            '_serialize' => ['data', 'date']
+        ]);
+    }
+
 }

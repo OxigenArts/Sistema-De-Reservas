@@ -52,17 +52,16 @@ class UsersController extends AppController
     public function add()
     {   $this->loadModel('Photos');
         $user = $this->Users->newEntity();
-        $photo = $this->Photos->newEntity();
-        $photo = $this->Photos->find('all')->first();
-        $photo->url = 'kabmsgnsd';
-                    debug($this->Photos->save($photo));
+        $nuevaFoto = $this->Photos->newEntity();
+        //$photo = $this->Photos->find('all')->first();
+        $nuevaFoto->url = 'kabmsgnsd';
+        
                 
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
-
-            if ($this->Users->save($user)) {
+            if ($nuevoUsuario = $this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
-                    
+                $nuevaFoto->user_id = $nuevoUsuario->id;
                     
                 //return $this->redirect(['action' => 'index']);
             }

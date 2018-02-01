@@ -72,27 +72,29 @@ class UsersController extends AppController
             if ($nuevoUsuario = $this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 $nuevaFoto->user_id = $nuevoUsuario->id;
-                $nuevoPerfil->json = json_encode([
-                                                    'description' => 'Default description', 
-                                                    'contact' => [
-                                                            
-                                                    ]
-                                                    ]);
+                
                 
                 
                 
 
                 $nuevaFotoId = $this->Photos->save($nuevaFoto);
-
+                $nuevoPerfil->json = json_encode([
+                    'description' => 'Default description', 
+                    'contact' => [
+                            
+                    ]
+                    ]);
                 $nuevoPerfil->user_id = $nuevoUsuario->id;
                 $nuevoPerfil->photo_id = $nuevaFotoId->id;
 
                 $nuevoForm->json = json_encode([]);
                 $nuevoForm->user_id = $nuevoUsuario->id;
 
-                $this->Profile->save($nuevoPerfil);
-                $this->Forms->save($nuevoForm);
+                $g1 = [];
+                $g1[] = $this->Profile->save($nuevoPerfil);
+                $g1[] = $this->Forms->save($nuevoForm);
                 
+                debug($g1);
                 //return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));

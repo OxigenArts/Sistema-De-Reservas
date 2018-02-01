@@ -91,7 +91,7 @@ class AppController extends Controller
     public function beforeFilter(Event $event)
     {
        // parent::beforeFilter($event);
-        $this->Auth->allow(['login', 'view', 'apikey', 'index']);
+        //$this->Auth->allow(['login', 'view', 'display', 'index']);
 
         $this->set([
             'user' => $this->Auth->user()

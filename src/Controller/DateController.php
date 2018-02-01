@@ -21,7 +21,7 @@ class DateController extends AppController
     public function index()
     {
         $this->paginate = [
-            'conditions' => ['user_id' => $this->Auth->user('id')]
+            'conditions' => ['user_id' => $this->Auth->user('id')],
             'contain' => ['Users']
         ];
         $date = $this->paginate($this->Date);

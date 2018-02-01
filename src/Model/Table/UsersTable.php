@@ -86,6 +86,9 @@ class UsersTable extends Table
         $this->hasMany('Subcategory', [
             'foreignKey' => 'user_id'
         ]);
+        $this->hasMany('mesage', [
+            'foreignKey' => 'user_id'
+        ]);
     }
 
     /**

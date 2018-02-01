@@ -1,7 +1,7 @@
 <?php
 use Migrations\AbstractMigration;
 
-class CreateUsers extends AbstractMigration
+class CreateMesage extends AbstractMigration
 {
     /**
      * Change Method.
@@ -12,20 +12,14 @@ class CreateUsers extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('users');
-        $table->addColumn('username', 'string', [
+        $table = $this->table('mesage');
+        $table->addColumn('json', 'text', [
             'default' => null,
-            'limit' => 255,
             'null' => false,
         ]);
-        $table->addColumn('password', 'string', [
+        $table->addColumn('user_id', 'integer', [
             'default' => null,
-            'limit' => 255,
-            'null' => false,
-        ]);
-        $table->addColumn('api_key', 'string', [
-            'default' => null,
-            'limit' => 255,
+            'limit' => 11,
             'null' => false,
         ]);
         $table->create();

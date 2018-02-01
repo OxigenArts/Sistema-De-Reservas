@@ -76,6 +76,8 @@ class ReservationController extends AppController
         $reservation = $this->Reservation->get($id, [
             'contain' => []
         ]);
+
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
             $reservation = $this->Reservation->patchEntity($reservation, $this->request->getData());
             if ($this->Auth->user('id') == $reservation->user_id || $this->Auth->user('role') == "admin") {
@@ -113,6 +115,11 @@ class ReservationController extends AppController
             $this->Flash->error(__('The reservation could not be deleted. Please, try again.'));
         }
 
+        $this->set([
+            'reservation' => $reservation,
+            '_serialize' => ['reservation']
+        ]);
+
     }
 
     public function setStatus($id = null)
@@ -126,7 +133,7 @@ class ReservationController extends AppController
             $date = $this->Reservation->patchEntity($date, $this->request->getData());
             if ($this->Auth->user('id') == $date->user_id || $this->Auth->user('role') == "admin") {
                 if ($this->Reservation->save($date)) {
-                    
+
                     $this->Flash->success(__('La reserva ha sido aceptada.'));
                 } else {
                     $this->Flash->error(__('La reserva no pudo ser aceptada, intentelo denuevo.'));

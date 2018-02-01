@@ -31,7 +31,7 @@ class FormsController extends AppController
             'conditions' => ['user_id' => $this->Auth->user('id')]
         ]);
 
-        $this->set(compact('forms'));
+        $this->set(['forms' => $forms, '_serialize' => 'forms']);
     }
 
     /**
@@ -93,7 +93,11 @@ class FormsController extends AppController
             $this->Flash->error(__('The form could not be saved. Please, try again.'));
         }
         $users = $this->Forms->Users->find('list', ['limit' => 200]);
-        $this->set(compact('form', 'users'));
+                $this->set(['forms' => $forms, '_serialize' => 'forms']);
+
+        $this->set(['forms' => $forms, '_serialize' => 'forms',
+            'users' => $users, '_serialize' => 'users'
+    ]);
     }
 
     /**

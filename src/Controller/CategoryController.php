@@ -76,9 +76,11 @@ class CategoryController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit()
-    {
+    public function edit($id = null)
+    {   if($this->Auth->user('role') != 'admin'){
         $id = $this->Auth->user('category_id');
+    }
+        
 
         $category = $this->Category->get($id, [
             'contain' => []
@@ -92,7 +94,9 @@ class CategoryController extends AppController
             }
             $this->Flash->error(__('The category could not be saved. Please, try again.'));
         }
-        $this->set(compact('category'));
+        $this->set(['category' => $category,
+            '_serialize' => 'category'
+    ]);
     }
 
     /**

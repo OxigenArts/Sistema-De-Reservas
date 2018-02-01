@@ -25,7 +25,7 @@ class PhotosController extends AppController
         ];
         $photos = $this->paginate($this->Photos);
 
-        $this->set(compact('photos'));
+        $this->set(['photos' => $photos, '_serialize' => 'photos']);
     }
 
     /**
@@ -87,7 +87,7 @@ class PhotosController extends AppController
             $this->Flash->error(__('The photo could not be saved. Please, try again.'));
         }
         $users = $this->Photos->Users->find('list', ['limit' => 200]);
-        $this->set(compact('photo', 'users'));
+        $this->set(['photos' => $photos, '_serialize' => 'photos']);
     }
 
     /**

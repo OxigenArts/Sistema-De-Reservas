@@ -19,9 +19,18 @@ class RoutinesController extends AppController
      */
     public function index()
     {
-        $routines = $this->paginate($this->Routines);
+        if($this->Auth->user('role')  == 'admin'){
+            $routines = $this->Routines->find('all');
+        }else{
+            $routines = $this->Routines->find('all',
+                ['conditions' => ['user_id' => $this->Auth->user('id')]]
+            );
+        }
 
-        $this->set(['routines' => $routines, '_serialize' => 'routines']);
+        
+        $this->set(['routines' => $routines,
+            '_serialize' => 'routines'
+    ]);
     }
 
     /**
@@ -81,7 +90,9 @@ class RoutinesController extends AppController
             }
             $this->Flash->error(__('The routine could not be saved. Please, try again.'));
         }
-        $this->set(compact('routine'));
+        $this->set(['routines' => $routines,
+            '_serialize' => 'routines'
+    ]);
     }
 
     /**

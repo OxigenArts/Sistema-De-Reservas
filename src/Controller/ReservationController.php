@@ -89,7 +89,7 @@ class ReservationController extends AppController
             }
             
         }
-        $this->set(compact('reservation'));
+        $this->set(['reservation' => $reservations, '_serialize' => 'reservation']);
     }
 
     /**

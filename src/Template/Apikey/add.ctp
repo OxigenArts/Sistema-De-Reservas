@@ -21,6 +21,9 @@
             echo $this->Form->control('user_id', ['options' => $users]);*/
         ?>
     </fieldset>
+    
+  Button
+</button>
     <?= $this->Form->button(__('Gererate ApiKey')) ?>
     <?= $this->Form->end() ?>
 </div>

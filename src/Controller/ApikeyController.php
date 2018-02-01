@@ -84,7 +84,7 @@ class ApikeyController extends AppController
             if ($this->Auth->user('role') == "admin") {
                 $apikey = $this->paginate($this->Apikey);
             } else {
-                $apikey = $this->find('all', [
+                $apikey = $this->Apikey->find('all', [
                     'conditions' => ['user_id' => $this->Auth->user('id')]
                 ]);
             }
@@ -92,7 +92,7 @@ class ApikeyController extends AppController
 
         
         
-        debug($data['profile']);
+        //debug($data['profile']);
         $this->set(['data' => $data,
                     'apikey' => $apikey,
                     '_serialize' => ['data', 'apikey']]);
@@ -103,6 +103,65 @@ class ApikeyController extends AppController
        /* $this->set(['apikey' => $apikey, '_serialize' => 'apikey', 'users' => $users, '_serialize' => 'users', 'profile' => $profile, '_serialize' => 'profile', 'forms' => $forms, '_serialize' => 'forms'
     ]);*/
     
+    }
+
+    public function apirequest() {
+        $this->loadModel('Profile');
+        $this->loadModel('Forms');
+        $this->loadModel("Users");
+
+        $data = [];
+        $apikey = '';
+        if ($this->request->is('post')) {
+            $formData = $this->request->getData();
+
+            $apiKey_external = $formData['apikey'];
+            
+            if ($apiKey_external) {
+                $keyRecord = $this->Apikey->find('all', [
+                    'conditions' => ['api_key' => $apiKey_external]
+                ])->first();
+                
+                
+                if ($keyRecord) {
+                    
+                    $profile = $this->Profile->find('all', [
+                        'contain' => ['Photos'],
+                        'conditions' => ['Profile.user_id' => $keyRecord->user_id]
+                    ])->first();
+    
+                    $form = $this->Forms->find('all', [
+                        'conditions' => ['user_id' => $keyRecord->user_id]
+                    ])->first();
+
+                    $data['profile'] = $profile;
+                    $data['form'] = $form;
+                    
+                } else {
+                    $data[] = ['error' => 'Invalid api key'];
+                }
+            } else {
+                $data[] = ['error' => 'No api key defined (invalid_api)', 'test_data' => $this->request->getData()];
+            }
+            
+        
+
+        } else {
+            if ($this->Auth->user('role') == "admin") {
+                $apikey = $this->paginate($this->Apikey);
+            } else {
+                $apikey = $this->find('all', [
+                    'conditions' => ['user_id' => $this->Auth->user('id')]
+                ]);
+            }
+        }
+
+        
+        
+        //debug($data['profile']);
+        $this->set(['data' => $data,
+                    'apikey' => $apikey,
+                    '_serialize' => ['data', 'apikey']]);
     }
 
     /**
@@ -153,11 +212,14 @@ class ApikeyController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit()
     {
-        $apikey = $this->Apikey->get($id, [
-            'contain' => ['Users']
-        ]);
+
+        $apikey = $this->Apikey->find('all', [
+            'contain' => ['Users'],
+            'conditions' => ["user_id" => $this->Auth->user('id')]
+        ])->first();
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $hasher  = new DefaultPasswordHasher();
             $api_key_plain = Security::hash(Security::randomBytes(32), 'sha256', false);
@@ -194,5 +256,23 @@ class ApikeyController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function isAuthorized($user)
+    {
+        if ($this->Auth->user('role') == 'admin') {
+            return true;
+        }
+
+        if($this->Auth->user('role') == 'user'){
+            if (in_array($this->request->action, ['index', 'edit'])) {
+                return true;
+            }
+            
+        }else{
+            return parent::isAuthorized($user);
+        }
+        // By default deny access.
+        
     }
 }

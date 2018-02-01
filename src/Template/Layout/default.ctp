@@ -82,6 +82,23 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                                 ['class' => 'mdl-navigation__link']
                             );
                         ?>
+
+                        <?=
+                            $this->Html->link(
+                                'Reservas',
+                                '/apikey',
+                                ['class' => 'mdl-navigation__link']
+                            );
+                        ?>
+
+                        <?=
+                            $this->Html->link(
+                                'Desconectar',
+                                '/users/logout',
+                                ['class' => 'mdl-navigation__link']
+                            );
+                        ?>
+
                 </nav>
             </div>
             <main class="mdl-layout__content">

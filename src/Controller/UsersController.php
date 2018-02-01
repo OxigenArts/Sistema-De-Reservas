@@ -53,13 +53,18 @@ class UsersController extends AppController
     {   $this->loadModel('Photos');
         $this->loadModel('Profile');
         $this->loadModel('Forms');
+        $this->loadModel('Apikey');
+
         $user = $this->Users->newEntity();
         $nuevaFoto = $this->Photos->newEntity();
         $newProfile = $this->Profile->newEntity();
         $newForm = $this->Forms->newEntity();
+        $newApikey = $this->Apikey->newEntity();
+
+
         //$photo = $this->Photos->find('all')->first();
         $nuevaFoto->url = 'img/users/user-placeholder.png';
-        
+        $newApikey->api_key = "not generated";
 
         
                 
@@ -77,9 +82,9 @@ class UsersController extends AppController
                 $this->Forms->save($newForm);
                 $foto_id = $this->Photos->save($nuevaFoto);
                 $newProfile->photo_id = $foto_id->id;
-
+                $newApikey->user_id = $nuevoUsuario->id;
                 $this->Profile->save($newProfile);
-
+                $this->Apikey->save($newApikey);
                 //return $this->redirect(['action' => 'index']);
             }else{
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
@@ -157,5 +162,23 @@ class UsersController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function isAuthorized($user)
+    {
+        if ($this->Auth->user('role') == 'admin') {
+            return true;
+        }
+
+        if($this->Auth->user('role') == 'user'){
+            if (in_array($this->request->action, ['login', 'logout'])) {
+                return true;
+            }
+            
+        }else{
+            return parent::isAuthorized($user);
+        }
+        // By default deny access.
+        
     }
 }

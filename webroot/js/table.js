@@ -1,7 +1,13 @@
 var table = new Vue({
     el: "#table",
     created: function() {
+
+        if (window.location.href[window.location.href.length-1] == "/" ) {
+            window.location.href[window.location.length-1] = "";
+            window.location.replace(window.location.href);
+        }
         this.refreshTable();
+
     },
     data: {
         tabledata: {},
@@ -9,7 +15,7 @@ var table = new Vue({
     },
     methods: {
         refreshTable: function() {
-            this.$http.get("../"+this.elname+'.json').then(function(response) {
+            this.$http.get(this.elname+'.json').then(function(response) {
                 console.log(response);
                 this.tabledata = response.body;
                 this.tabledata.forEach(function(item, index) {
@@ -20,7 +26,7 @@ var table = new Vue({
         },
         delete: function(id) {
             console.log("trying to delete id "+id);
-            this.$http.delete("/"+this.elname+"/delete/"+id+".json").then(function(response) {
+            this.$http.delete(this.elname+"/delete/"+id+".json").then(function(response) {
                 this.refreshTable();
                 console.log(response);
             }, function(err) {
@@ -29,20 +35,20 @@ var table = new Vue({
         },
         accept: function(id) {
             console.log("trying to set status of "+id);
-            this.$http.post("/setstatus/"+id+".json", {status: 'accepted'}).then(function(response) {
+            this.$http.post(this.elname+"/setstatus/"+id+".json", {status: 'accepted'}).then(function(response) {
                 console.log(response.body);
                 this.refreshTable();
             })
         },
         dismiss: function(id) {
             console.log("trying to set status of "+id);
-            this.$http.post("/setstatus/"+id+".json", {status: 'rejected'}).then(function(response) {
+            this.$http.post(this.elname+"/setstatus/"+id+".json", {status: 'rejected'}).then(function(response) {
                 console.log(response.body);
                 this.refreshTable();
             })
         },
         edit: function(id) {
-            window.location.replace("../"+this.elname+"/edit/"+id);
+            window.location.replace(this.elname+"/edit/"+id);
         },
         getRandomId: function() {
             var S4 = function() {

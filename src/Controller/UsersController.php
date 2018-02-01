@@ -50,7 +50,6 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add()
-<<<<<<< HEAD
     {   $this->loadModel('Photos');
         $this->loadModel('Profile');
         $this->loadModel('Forms');
@@ -58,19 +57,6 @@ class UsersController extends AppController
         $nuevaFoto = $this->Photos->newEntity();
         $newProfile = $this->Profile->newEntity();
         $newForm = $this->Forms->newEntity();
-=======
-    {   
-        $this->loadModel('Photos');
-        $this->loadModel('Profile');
-        $this->loadModel('Forms');
-
-        $user = $this->Users->newEntity();
-        $nuevaFoto = $this->Photos->newEntity();
-        $nuevoPerfil = $this->Photos->newEntity();
-        $nuevoForm = $this->Forms->newEntity();
-
-
->>>>>>> 23e2d30490059a4fcf77a95a76c5361adbace312
         //$photo = $this->Photos->find('all')->first();
         $nuevaFoto->url = 'img/users/user-placeholder.png';
         
@@ -86,7 +72,6 @@ class UsersController extends AppController
             if ($nuevoUsuario = $this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 $nuevaFoto->user_id = $nuevoUsuario->id;
-<<<<<<< HEAD
                 $newProfile->user_id = $nuevoUsuario->id;
                 $newForm->user_id = $nuevoUsuario->id;
                 $this->Forms->save($newForm);
@@ -95,31 +80,6 @@ class UsersController extends AppController
 
                 $this->Profile->save($newProfile);
 
-=======
-                
-                
-                
-                
-
-                $nuevaFotoId = $this->Photos->save($nuevaFoto);
-                $nuevoPerfil->json = json_encode([
-                    'description' => 'Default description', 
-                    'contact' => [
-                            
-                    ]
-                    ]);
-                $nuevoPerfil->user_id = $nuevoUsuario->id;
-                $nuevoPerfil->photo_id = $nuevaFotoId->id;
-
-                $nuevoForm->json = json_encode([]);
-                $nuevoForm->user_id = $nuevoUsuario->id;
-
-                $g1 = [];
-                $g1[] = $this->Profile->save($nuevoPerfil);
-                $g1[] = $this->Forms->save($nuevoForm);
-                
-                debug($g1);
->>>>>>> 23e2d30490059a4fcf77a95a76c5361adbace312
                 //return $this->redirect(['action' => 'index']);
             }else{
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));

@@ -92,10 +92,6 @@ class ApikeyController extends AppController
 
         
         
-<<<<<<< HEAD
-=======
-        //debug($data['profile']);
->>>>>>> 979f71e1635877122e5f4e61b7728ed0fff8e371
         $this->set(['data' => $data,
                     'apikey' => $apikey,
                     '_serialize' => ['data', 'apikey']]);

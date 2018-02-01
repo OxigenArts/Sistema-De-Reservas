@@ -82,11 +82,7 @@ class AppController extends Controller
     public function beforeFilter(Event $event)
     {
        // parent::beforeFilter($event);
-<<<<<<< HEAD
         //$this->Auth->allow(['login', 'view', 'display', 'index']);
-=======
-        $this->Auth->allow(['login', 'apirequest']);
->>>>>>> 979f71e1635877122e5f4e61b7728ed0fff8e371
 
         $this->set([
             'user' => $this->Auth->user()

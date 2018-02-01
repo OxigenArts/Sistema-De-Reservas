@@ -5,3 +5,8 @@
 .edit_profile .mdl-cell {
     padding: 10px;
 }
+
+.map-container {
+    width: 300px !important;
+    height: 300px !important;
+}

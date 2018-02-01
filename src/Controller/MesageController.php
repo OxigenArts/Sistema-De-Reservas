@@ -74,7 +74,7 @@ class MesageController extends AppController
         $mesage = $this->Mesage->get($id, [
             'contain' => []
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
+        if ($this->request->is(['patch', 'post', 'put']) && ($mesage->user_id == $this->Auth->user('id') || $this->Auth->user('role') == "admin")) {
             $mesage = $this->Mesage->patchEntity($mesage, $this->request->getData());
             if ($this->Mesage->save($mesage)) {
                 $this->Flash->success(__('The mesage has been saved.'));
@@ -97,12 +97,38 @@ class MesageController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $mesage = $this->Mesage->get($id);
-        if ($this->Mesage->delete($mesage)) {
-            $this->Flash->success(__('The mesage has been deleted.'));
-        } else {
-            $this->Flash->error(__('The mesage could not be deleted. Please, try again.'));
+        if ($this->Auth->user('role') == "admin" || $this->Auth->user('id') == $mesage->user_id) {
+            if ($this->Mesage->delete($mesage)) {
+                $this->Flash->success(__('The mesage has been deleted.'));
+            } else {
+                $this->Flash->error(__('The mesage could not be deleted. Please, try again.'));
+            }
+        }
+        
+        $this->set([
+            'mesage' => $mesage,
+            '_serialize' => ['mesage']
+        ]);
+        
+        //return $this->redirect(['action' => 'index']);
+    }
+
+    public function isAuthorized($user)
+    {
+        if ($this->Auth->user('role') == 'admin') {
+            return true;
         }
 
-        return $this->redirect(['action' => 'index']);
+        if($this->Auth->user('role') == 'user'){
+            if (in_array($this->request->action, ['index', 'delete'])) {
+                return true;
+            }
+            
+        }else{
+            return parent::isAuthorized($user);
+        }
+        // By default deny access.
+        
     }
+
 }

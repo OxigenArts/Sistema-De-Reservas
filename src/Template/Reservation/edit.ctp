@@ -1,4 +1,8 @@
+<?php
 
+$this->assign('title', "Reservaciones");
+
+?>
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header" id="edit">
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row" style="padding: 0;">

@@ -94,6 +94,7 @@ class ApikeyController extends AppController
         
         $this->set(['data' => $data,
                     'apikey' => $apikey,
+                    'title' => "Llave de acceso",
                     '_serialize' => ['data', 'apikey']]);
                     
 
@@ -162,6 +163,43 @@ class ApikeyController extends AppController
                     'apikey' => $apikey,
                     '_serialize' => ['data', 'apikey']]);
     }
+
+    public function message() {
+        $this->loadModel('Mesage');
+        $status = [];
+        if ($this->request-is('post')) {
+            $formData = $this->request->getData();
+
+            $apiKey_external = $formData['apikey'];
+            
+            if ($apiKey_external) {
+
+                $keyRecord = $this->Apikey->find('all', [
+                    'conditions' => ['api_key' => $apiKey_external]
+                ])->first();
+            
+                $newMessage = $this->Mesage->newEntity();
+
+                $newMessage->user_id = $keyRecord->user_id;
+                $newMessage->json = $formData['data'];
+
+                $this->Mesage->save($newMessage);
+                $status[] = ['success' => true];
+            
+                } else {
+                    $status[] = ['error' => true, 'message' => 'No api key provided.'];
+                }
+
+        
+    } else {
+        $status[] = ['error' => true, 'message' => 'Invalid operation'];
+    }
+
+    $this->set([
+        'status' => $status,
+        '_serialize' => ['status']
+    ]);
+}
 
     /**
      * View method
@@ -232,7 +270,7 @@ class ApikeyController extends AppController
             $this->Flash->error(__('The apikey could not be saved. Please, try again.'));
         }
         $users = $this->Apikey->Users->find('all', ['limit' => 200]);
-        debug($apikey);
+        //debug($apikey);
         $this->set(['apikey' => $apikey, '_serialize' => 'apikey'//, 'users' => $users, '_serialize' => 'users'
     ]);
     }
@@ -259,12 +297,16 @@ class ApikeyController extends AppController
 
     public function isAuthorized($user)
     {
+        if (in_array($this->request->action, ['message', 'apirequest'])) {
+            return true;
+        }
+
         if ($this->Auth->user('role') == 'admin') {
             return true;
         }
 
         if($this->Auth->user('role') == 'user'){
-            if (in_array($this->request->action, ['index', 'edit'])) {
+            if (in_array($this->request->action, ['index', 'edit','message', 'apirequest'])) {
                 return true;
             }
             

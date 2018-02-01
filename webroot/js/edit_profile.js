@@ -8,6 +8,59 @@ function guid() {
       s4() + '-' + s4() + s4() + s4();
   }
 
+
+
+
+Vue.component("selector-map", {
+    template: "<div class='map-container'></div>",
+    props: {
+        lat: {
+            default: 55.01657628017477
+        },
+        lon: {
+            default: -7.309233337402361
+        },
+        pos: {
+        }
+    },
+    data: function() {
+        return {
+            latitude: this.lat,
+            longitude: this.lon
+        }
+    },
+    mounted: function() {
+
+        
+        var myLatlng = new google.maps.LatLng(this.lat, this.lon);
+      // Options
+      var mapOptions = {
+        zoom: 12,
+        center: myLatlng
+      };
+
+      console.log(myLatlng, this.latitude, this.longitude, mapOptions);
+      // Apply options
+      var map = new google.maps.Map(this.$el, mapOptions);
+      // Add marker
+      var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map
+      });
+      marker.setMap(map);
+      var self = this;
+      google.maps.event.addListener(map, "center_changed", function() {
+        var lat = map.getCenter().lat();
+        var lon = map.getCenter().lng();
+        var newLatLng = {lat: lat, lng: lon};
+        marker.setPosition(newLatLng);
+        editprofile.locationUpdated(newLatLng);
+        //self.$emit('locationUpdated', newLatLng);
+      });
+
+    }
+});
+
 var editprofile = new Vue({
     el: "#edit",
     created: function() {
@@ -21,8 +74,8 @@ var editprofile = new Vue({
     methods: {
         fetch: function() {
             this.$http.get("../profile/edit.json").then(function(response) {
-                console.log(response.body);
-                //this.profile_data = JSON.parse(response.body.json);
+                console.log(response);
+                this.profile_data = JSON.parse(response.body.json);
                 this.profile_photo = response.body.photo.url;
                 //console.log(this.profile_data);
             });
@@ -72,6 +125,9 @@ var editprofile = new Vue({
                 console.log(response);
                 this.fetch();
             });
+        },
+        locationUpdated: function(loc) {
+            this.profile_data.location = loc;
         }
     }
 });

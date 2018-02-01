@@ -108,6 +108,10 @@ class UsersController extends AppController
             }
             $this->Flash->error('Your username or password is incorrect.');
         }
+
+        if ($this->Auth->user('role') == "admin" || $this->Auth->user('role') == "user") {
+            return $this->redirect($this->Auth->redirectUrl());
+        }
     }
     public function logout()
 {

@@ -151,10 +151,15 @@ class ProfileController extends AppController
             $rData = $this->request->getData();
             if (move_uploaded_file($rData['url']['tmp_name'], WWW_ROOT . "img/users/".$rData['url']['name'])) {
 
+                
                 $userProfile = $this->Profile->find("all", [
                     "conditions" => ["profile.user_id" => $this->Auth->user('id')],
                     "contain" => ['Photos']
                 ])->first();
+                
+                if ($userProfile->photo->url != "img/users/user-placeholder.png") {
+                    unlink(WWW_ROOT . $userProfile->photo->url);
+                }
                 
                 $userProfile->photo->url = "img/users/".$rData['url']['name'];
 
@@ -166,7 +171,8 @@ class ProfileController extends AppController
         debug($userProfile->photo);
         $this->set([
             'data' => $userProfile,
-            '_serialize' => ['data']
+            'rData' => $rData,
+            '_serialize' => ['data', 'rData']
         ]);
         
 
@@ -179,7 +185,7 @@ class ProfileController extends AppController
         }
 
         if($this->Auth->user('role') == 'user'){
-            if (in_array($this->request->action, ['edit'])) {
+            if (in_array($this->request->action, ['edit', 'uploadprofilephoto'])) {
                 return true;
             }
             

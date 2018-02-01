@@ -1,6 +1,9 @@
 <?= $this->Html->css('date') ?>
 <div class="table-responsive">
+<?php
+$this->assign('title', "Reservaciones");
 
+?>
 <table class="mdl-shadow--2dp table" style="width: 100%;" id="table">
         <thead>
             <tr>
@@ -47,5 +50,7 @@
     
 
     <?= $this->Html->script('table') ?>
-
+<script>
+    table.setElement("reservation", "name", true);
+</script>
 

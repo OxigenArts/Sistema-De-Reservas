@@ -11,16 +11,29 @@ var table = new Vue({
     },
     data: {
         tabledata: {},
-        elname: "reservation"
+        elname: "",
+        jsonfield: "",
+        parseRequired: false
     },
     methods: {
+        setElement: function(element, field, parseRequired) {
+            this.elname = element;
+            this.jsonfield = field;
+            this.parseRequired = parseRequired;
+            this.refreshTable();
+            console.log("setting element", this.jsonfield);
+        },
         refreshTable: function() {
             this.$http.get(this.elname+'.json').then(function(response) {
                 console.log(response);
                 this.tabledata = response.body;
-                this.tabledata.forEach(function(item, index) {
-                    if (item.name) item.name = JSON.parse(item.name);
-                });
+                var self = this;
+                if (this.parseRequired) {
+                    this.tabledata.forEach(function(item, index) {
+                        if (item[self.jsonfield]) item[self.jsonfield] = JSON.parse(item[self.jsonfield]);
+                    });
+                }
+                
             });
 
         },
@@ -56,6 +69,12 @@ var table = new Vue({
              };
              return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
          
+        },
+        refresh: function() {
+            this.$http.post(this.elname+"/edit.json").then(function(response) {
+                console.log(response);
+                this.refreshTable();
+            })
         }
     }
 });

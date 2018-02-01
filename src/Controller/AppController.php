@@ -88,4 +88,5 @@ class AppController extends Controller
             'user' => $this->Auth->user()
         ]);
     }
+
 }

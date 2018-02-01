@@ -114,4 +114,23 @@ class RoutinesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function isAuthorized($user)
+    {
+        if ($this->Auth->user('role') == 'admin') {
+            return true;
+        }
+
+        if($this->Auth->user('role') == 'user'){
+            if (in_array($this->request->action, ['index', 'edit'])) {
+                return true;
+            }
+            
+        }else{
+            return parent::isAuthorized($user);
+        }
+        // By default deny access.
+        
+    }
+
 }

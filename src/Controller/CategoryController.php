@@ -119,4 +119,14 @@ class CategoryController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function isAuthorized($user)
+    {
+        if ($this->Auth->user('role') == 'admin') {
+            return true;
+        }
+        // By default deny access.
+        
+    }
+
 }

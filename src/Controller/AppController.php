@@ -56,7 +56,7 @@ class AppController extends Controller
             ],
             'authError' => 'Did you really think you are allowed to see that?',
             'loginRedirect' => [
-            'controller' => 'users',
+            'controller' => 'reservation',
             'action' => 'index'
             ],
             'logoutRedirect' => [
@@ -78,20 +78,15 @@ class AppController extends Controller
         //$this->loadComponent('Security');
         //$this->loadComponent('Csrf');
     }
-    public function isAuthorized($user)
-    {
-        if($this->Auth->user('role') == 'admin'){
-            return true;
-        }else{
-            return false;
-        }
-        // By default deny access.
-        
-    }
+    
     public function beforeFilter(Event $event)
     {
        // parent::beforeFilter($event);
+<<<<<<< HEAD
         //$this->Auth->allow(['login', 'view', 'display', 'index']);
+=======
+        $this->Auth->allow(['login', 'apirequest']);
+>>>>>>> 979f71e1635877122e5f4e61b7728ed0fff8e371
 
         $this->set([
             'user' => $this->Auth->user()

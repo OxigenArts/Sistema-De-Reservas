@@ -51,11 +51,11 @@ class UsersTable extends Table
             'foreignKey' => 'category_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Subcategories', [
+        $this->belongsTo('Subcategory', [
             'foreignKey' => 'subcategory_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Profiles', [
+        $this->belongsTo('Profile', [
             'foreignKey' => 'profile_id',
             'joinType' => 'INNER'
         ]);
@@ -136,8 +136,8 @@ class UsersTable extends Table
     {
         $rules->add($rules->isUnique(['username']));
         $rules->add($rules->existsIn(['category_id'], 'Category'));
-        $rules->add($rules->existsIn(['subcategory_id'], 'Subcategories'));
-        $rules->add($rules->existsIn(['profile_id'], 'Profiles'));
+        $rules->add($rules->existsIn(['subcategory_id'], 'Subcategory'));
+        $rules->add($rules->existsIn(['profile_id'], 'Profile'));
 
         return $rules;
     }

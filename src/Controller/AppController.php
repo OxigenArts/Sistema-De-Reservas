@@ -80,13 +80,18 @@ class AppController extends Controller
     }
     public function isAuthorized($user)
     {
+        if($this->Auth->user('role') == 'admin'){
+            return true;
+        }else{
+            return false;
+        }
         // By default deny access.
-        return true;
+        
     }
     public function beforeFilter(Event $event)
     {
        // parent::beforeFilter($event);
-        $this->Auth->allow(['login', 'view', 'display', 'index']);
+        $this->Auth->allow(['login', 'view', 'apikey', 'index']);
 
         $this->set([
             'user' => $this->Auth->user()

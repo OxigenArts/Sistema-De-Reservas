@@ -34,11 +34,10 @@ class ApikeyController extends AppController
         	$profile = $this->Profile->find('all', ['conditions' => ['user_id' => $this->Auth->user('id')]]);
         	$forms = $this->Forms->find('all', ['conditions' => ['user_id' => $this->Auth->user('id')]]);
         }
-<<<<<<< HEAD
         //debug($profile);
-=======
+
         debug($profile);*/
->>>>>>> fa3dbd84440b5b881dd30954b273eacd4a0f6f04
+
         
 
         $this->loadModel('Profile');
@@ -93,7 +92,7 @@ class ApikeyController extends AppController
 
         
         
-        //debug($data);
+        debug($data['profile']);
         $this->set(['data' => $data,
                     'apikey' => $apikey,
                     '_serialize' => ['data', 'apikey']]);
@@ -103,6 +102,7 @@ class ApikeyController extends AppController
         
        /* $this->set(['apikey' => $apikey, '_serialize' => 'apikey', 'users' => $users, '_serialize' => 'users', 'profile' => $profile, '_serialize' => 'profile', 'forms' => $forms, '_serialize' => 'forms'
     ]);*/
+    
     }
 
     /**

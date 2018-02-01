@@ -97,7 +97,7 @@ class ProfileController extends AppController
      */
     public function edit($id = null)
     {
-        if ($this->Auth->user('role') == "admin" && id != null) {
+        if ($this->Auth->user('role') == "admin" && $id != null) {
             $profile = $this->Profile->get($id, [
                 "contain" => ['Users', 'Photos']
             ]);
@@ -163,9 +163,9 @@ class ProfileController extends AppController
             }
             
         }
-
+        debug($userProfile->photo);
         $this->set([
-            'data' => $userProfile->photo,
+            'data' => $userProfile,
             '_serialize' => ['data']
         ]);
         

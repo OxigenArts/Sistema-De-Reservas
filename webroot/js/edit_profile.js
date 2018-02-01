@@ -22,9 +22,9 @@ var editprofile = new Vue({
         fetch: function() {
             this.$http.get("../profile/edit.json").then(function(response) {
                 console.log(response.body);
-                this.profile_data = JSON.parse(response.body.json);
+                //this.profile_data = JSON.parse(response.body.json);
                 this.profile_photo = response.body.photo.url;
-                console.log(this.profile_data);
+                //console.log(this.profile_data);
             });
         },
         save: function() {

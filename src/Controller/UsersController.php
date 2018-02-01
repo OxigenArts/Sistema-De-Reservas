@@ -38,7 +38,7 @@ class UsersController extends AppController
     public function view($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => ['Category', 'Subcategories', 'Profile', 'Apikey', 'Date', 'Directory', 'Forms', 'Photos', 'Reservation', 'Routines', 'Subcategory']
+            'contain' => ['Category', 'Subcategory', 'Profile', 'Apikey', 'Date', 'Directory', 'Forms', 'Photos', 'Reservation', 'Routines', 'Subcategory']
         ]);
 
         $this->set('user', $user);
@@ -51,26 +51,42 @@ class UsersController extends AppController
      */
     public function add()
     {   $this->loadModel('Photos');
+        $this->loadModel('Profile');
+        $this->loadModel('Forms');
         $user = $this->Users->newEntity();
         $nuevaFoto = $this->Photos->newEntity();
+        $newProfile = $this->Profile->newEntity();
+        $newForm = $this->Forms->newEntity();
         //$photo = $this->Photos->find('all')->first();
         $nuevaFoto->url = 'img/users/user-placeholder.png';
         
                 
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+            $user->role = 'user';
+            $user->status = 'pending';
+            $user->category_id = 1;
+            //debug($user);
             if ($nuevoUsuario = $this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 $nuevaFoto->user_id = $nuevoUsuario->id;
-                
-                $this->Photos->save($nuevaFoto);
+                $newProfile->user_id = $nuevoUsuario->id;
+                $newForm->user_id = $nuevoUsuario->id;
+                $this->Forms->save($newForm);
+                $foto_id = $this->Photos->save($nuevaFoto);
+                $newProfile->photo_id = $foto_id->id;
+
+                $this->Profile->save($newProfile);
+
                 //return $this->redirect(['action' => 'index']);
+            }else{
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            
         }
         $category = $this->Users->Category->find('list', ['limit' => 200]);
-        $subcategories = $this->Users->Subcategory->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'category', 'subcategories'));
+        $subcategory = $this->Users->Subcategory->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'category', 'subcategory'));
     }
 
 
@@ -113,11 +129,11 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $category = $this->Users->Category->find('list', ['limit' => 200]);
-        $subcategories = $this->Users->Subcategories->find('list', ['limit' => 200]);
+        $subcategory = $this->Users->Subcategory->find('list', ['limit' => 200]);
         //$this->set(compact('user', 'category', 'subcategories'));
         $this->set(['user' => $user, '_serialize' => 'user',
-                    'category' => $categoty, '_serialize' => 'category',
-                    'subcategories' => $subcategories, '_serialize' => 'subcategories'
+                    'category' => $category, '_serialize' => 'category',
+                    'subcategory' => $subcategory, '_serialize' => 'subcategory'
     ]);
     }
 

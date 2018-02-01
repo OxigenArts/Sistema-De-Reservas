@@ -16,6 +16,7 @@ var editreservation = new Vue({
     data: {
         reservation_data: {},
         formData: {},
+        editing: {},
         id: 0
     },
     methods: {
@@ -24,11 +25,14 @@ var editreservation = new Vue({
                 console.log(response.body);
                 this.reservation_data = response.body;
                 this.reservation_data.name = JSON.parse(this.reservation_data.name);
+                for (var a in this.reservation_data.name.data) {
+                    this.editing[a] = false;
+                }
                 console.log(this.reservation_data);
             });
         },
         save: function() {
-            this.$http.post("../edit/"+this.id+".json", {name: JSON.stringify(this.reservation_data)}).then(function(response) {
+            this.$http.post("../edit/"+this.id+".json", {name: JSON.stringify(this.reservation_data.name)}).then(function(response) {
                 this.fetch();
             })
         },
@@ -47,6 +51,12 @@ var editreservation = new Vue({
                 console.log(response.body);
                 this.fetch();
             });
+        },
+        delete: function() {
+            this.$http.delete("../delete/"+this.id+".json").then(function(response) {
+                console.log(response);
+                window.location.replace("..");
+            })
         }
     }
 });

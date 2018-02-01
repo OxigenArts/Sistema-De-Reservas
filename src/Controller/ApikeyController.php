@@ -36,6 +36,58 @@ class ApikeyController extends AppController
         }
         debug($profile);
         
+/*
+        $this->loadModel('Profile');
+        $this->loadModel('Forms');
+        
+
+        $data = [];
+        $apikey = '';
+        if ($this->request->is('post')) {
+            $formData = $this->request->getData();
+
+            $apiKey_external = $formData['apikey'];
+
+            if ($apiKey_external) {
+                $keyRecord = $this->Apikey->find('all', [
+                    'conditions' => ['api_key' => $apiKey_external],
+                    'contain' => ['Users']
+                ])->first();
+                
+                if ($keyRecord) {
+                    $profile = $this->Profile->find('all', [
+                        'contain' => ['Photos'],
+                        'conditions' => ['user_id' => $keyRecord->user->id]
+                    ]);
+    
+                    $form = $this->Forms->find('all', [
+                        'conditions' => ['user_id' => $keyRecord->user->id]
+                    ]);
+                    if ($profile) $data[] = $profile->first();
+                    if ($form) $data[] = $form->first();
+                    
+                } else {
+                    $data[] = ['error' => 'Invalid api key'];
+                }
+            } else {
+                $data[] = ['error' => 'No api key defined'];
+            }
+            
+        
+
+        } else {
+            $data[] = ['error' => 'No api key defined'];
+        }
+
+        $apikey = $this->paginate($this->Apikey);
+        debug($data);
+        $this->set(['data' => $data,
+                    'apikey' => $apikey,
+                    '_serialize' => ['data', 'apikey']]);
+                    */
+
+
+        
         $this->set(['apikey' => $apikey, '_serialize' => 'apikey', 'users' => $users, '_serialize' => 'users', 'profile' => $profile, '_serialize' => 'profile', 'forms' => $forms, '_serialize' => 'forms'
     ]);
     }

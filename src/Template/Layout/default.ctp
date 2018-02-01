@@ -32,6 +32,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                         <?= $this->fetch('meta') ?>
                         <?= $this->fetch('css') ?>
                         <?= $this->fetch('script') ?>
+                        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
                         <script src="https://cdn.jsdelivr.net/npm/vue"></script>
                         <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.5"></script>
                         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">

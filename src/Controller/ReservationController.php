@@ -77,7 +77,7 @@ class ReservationController extends AppController
             'contain' => []
         ]);
 
-        
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $reservation = $this->Reservation->patchEntity($reservation, $this->request->getData());
             if ($this->Auth->user('id') == $reservation->user_id || $this->Auth->user('role') == "admin") {
@@ -87,7 +87,8 @@ class ReservationController extends AppController
                     $this->Flash->error(__('The reservation could not be saved. Please, try again.'));
                 }
             } else {
-                $this->Flash->error(__('The reservation could not be saved. Please, try again.'));
+                $this->Flash->error(__('This reservation is not yours!.'));
+                return $this->redirect(['action' => 'index']);
             }
             
         }

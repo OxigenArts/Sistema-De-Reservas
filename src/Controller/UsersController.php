@@ -50,11 +50,21 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add()
-    {   $this->loadModel('Photos');
+    {   
+        $this->loadModel('Photos');
+        $this->loadModel('Profile');
+        $this->loadModel('Forms');
+
         $user = $this->Users->newEntity();
         $nuevaFoto = $this->Photos->newEntity();
+        $nuevoPerfil = $this->Photos->newEntity();
+        $nuevoForm = $this->Forms->newEntity();
+
+
         //$photo = $this->Photos->find('all')->first();
         $nuevaFoto->url = 'img/users/user-placeholder.png';
+        
+
         
                 
         if ($this->request->is('post')) {
@@ -62,8 +72,27 @@ class UsersController extends AppController
             if ($nuevoUsuario = $this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 $nuevaFoto->user_id = $nuevoUsuario->id;
+                $nuevoPerfil->json = json_encode([
+                                                    'description' => 'Default description', 
+                                                    'contact' => [
+                                                            
+                                                    ]
+                                                    ]);
                 
-                $this->Photos->save($nuevaFoto);
+                
+                
+
+                $nuevaFotoId = $this->Photos->save($nuevaFoto);
+
+                $nuevoPerfil->user_id = $nuevoUsuario->id;
+                $nuevoPerfil->photo_id = $nuevaFotoId->id;
+
+                $nuevoForm->json = json_encode([]);
+                $nuevoForm->user_id = $nuevoUsuario->id;
+
+                $this->Profile->save($nuevoPerfil);
+                $this->Forms->save($nuevoForm);
+                
                 //return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));

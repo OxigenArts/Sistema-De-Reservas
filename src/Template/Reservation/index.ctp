@@ -1,7 +1,7 @@
 <?= $this->Html->css('date') ?>
-<div>
+<div class="table-responsive">
 
-<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%;" id="table">
+<table class="mdl-shadow--2dp table" style="width: 100%;" id="table">
         <thead>
             <tr>
                 <th>Identificador</th>

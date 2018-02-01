@@ -19,7 +19,7 @@ class ApikeyController extends AppController
      * @return \Cake\Http\Response|void
      */
     public function index()
-    {	$this->loadModel('Profile');
+    {	/*$this->loadModel('Profile');
     	$this->loadModel('Forms');
         $this->paginate = [
             'contain' => ['Users']
@@ -34,10 +34,75 @@ class ApikeyController extends AppController
         	$profile = $this->Profile->find('all', ['conditions' => ['user_id' => $this->Auth->user('id')]]);
         	$forms = $this->Forms->find('all', ['conditions' => ['user_id' => $this->Auth->user('id')]]);
         }
+<<<<<<< HEAD
         //debug($profile);
+=======
+        debug($profile);*/
+>>>>>>> fa3dbd84440b5b881dd30954b273eacd4a0f6f04
         
-        $this->set(['apikey' => $apikey, '_serialize' => 'apikey', 'users' => $users, '_serialize' => 'users', 'profile' => $profile, '_serialize' => 'profile', 'forms' => $forms, '_serialize' => 'forms'
-    ]);
+
+        $this->loadModel('Profile');
+        $this->loadModel('Forms');
+        $this->loadModel("Users");
+
+        $data = [];
+        $apikey = '';
+        if ($this->request->is('post')) {
+            $formData = $this->request->getData();
+
+            $apiKey_external = $formData['apikey'];
+            
+            if ($apiKey_external) {
+                $keyRecord = $this->Apikey->find('all', [
+                    'conditions' => ['api_key' => $apiKey_external]
+                ])->first();
+                
+                
+                if ($keyRecord) {
+                    
+                    $profile = $this->Profile->find('all', [
+                        'contain' => ['Photos'],
+                        'conditions' => ['Profile.user_id' => $keyRecord->user_id]
+                    ])->first();
+    
+                    $form = $this->Forms->find('all', [
+                        'conditions' => ['user_id' => $keyRecord->user_id]
+                    ])->first();
+
+                    $data['profile'] = $profile;
+                    $data['form'] = $form;
+                    
+                } else {
+                    $data[] = ['error' => 'Invalid api key'];
+                }
+            } else {
+                $data[] = ['error' => 'No api key defined (invalid_api)', 'test_data' => $this->request->getData()];
+            }
+            
+        
+
+        } else {
+            if ($this->Auth->user('role') == "admin") {
+                $apikey = $this->paginate($this->Apikey);
+            } else {
+                $apikey = $this->find('all', [
+                    'conditions' => ['user_id' => $this->Auth->user('id')]
+                ]);
+            }
+        }
+
+        
+        
+        //debug($data);
+        $this->set(['data' => $data,
+                    'apikey' => $apikey,
+                    '_serialize' => ['data', 'apikey']]);
+                    
+
+
+        
+       /* $this->set(['apikey' => $apikey, '_serialize' => 'apikey', 'users' => $users, '_serialize' => 'users', 'profile' => $profile, '_serialize' => 'profile', 'forms' => $forms, '_serialize' => 'forms'
+    ]);*/
     }
 
     /**

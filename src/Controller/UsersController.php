@@ -55,6 +55,7 @@ class UsersController extends AppController
         $this->loadModel('Forms');
         $this->loadModel('Apikey');
         $this->loadModel('Routines');
+        $this->loadModel('Gallery');
 
         $user = $this->Users->newEntity();
         $nuevaFoto = $this->Photos->newEntity();
@@ -63,13 +64,19 @@ class UsersController extends AppController
         $newApikey = $this->Apikey->newEntity();
         $newRoutine = $this->Routines->newEntity();
 
+        $newGallery = $this->Gallery->newEntity();
+
+
         //$photo = $this->Photos->find('all')->first();
         $nuevaFoto->url = 'img/users/user-placeholder.png';
         $newApikey->api_key = "not generated";
 
+        $newForm->json = json_encode([]);
+        $newProfile->json = json_encode([]);
+        $newRoutine->json = json_encode([]);
         
-    
-        
+
+        $newGallery->url = "img/users/user-placeholder.png";
                 
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
@@ -93,8 +100,12 @@ class UsersController extends AppController
                 $newRoutine->user_id = $nuevoUsuario->id;
 
 
-                $this->Profile->save($newProfile);
+                $profile = $this->Profile->save($newProfile);
                 $this->Apikey->save($newApikey);
+
+                $newGallery->profile_id = $profile->id;
+
+                $this->Gallery->save($newGallery);
                 //return $this->redirect(['action' => 'index']);
             }else{
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));

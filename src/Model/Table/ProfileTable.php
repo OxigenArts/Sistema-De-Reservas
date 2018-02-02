@@ -49,6 +49,9 @@ class ProfileTable extends Table
         $this->hasMany('Users', [
             'foreignKey' => 'profile_id'
         ]);
+        $this->hasMany('Gallery', [
+            'foreignKey' => 'profile_id'
+        ]);
     }
 
     /**

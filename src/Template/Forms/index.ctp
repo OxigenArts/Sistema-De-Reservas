@@ -4,46 +4,96 @@
  * @var \App\Model\Entity\Form[]|\Cake\Collection\CollectionInterface $forms
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Form'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="forms index large-9 medium-8 columns content">
-    <h3><?= __('Forms') ?></h3>
-    <table cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('user_id') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($forms as $form): ?>
-            <tr>
-                <td><?= $this->Number->format($form->id) ?></td>
-                <td><?= $form->has('user') ? $this->Html->link($form->user->id, ['controller' => 'Users', 'action' => 'view', $form->user->id]) : '' ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $form->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $form->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $form->id], ['confirm' => __('Are you sure you want to delete # {0}?', $form->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
-    </div>
-</div>
+<?= $this->Html->css('formulario') ?>
+<?= $this->Html->css('vue-material.min') ?>
+<?= $this->Html->css('vue-material.theme') ?>
+
+<div id="container" class="container-fluid p-0 m-0 main">
+		<div class="header">
+
+			<md-toolbar>
+		      <h3 class="md-title" style="flex: 1">Campos requeridos</h3>
+		      <md-button class="md-icon-button" @click="agregar = true">
+		        <md-icon class="md-default">add</md-icon>
+		      </md-button>
+              <md-button class="md-icon-button" @click="save">
+		        <md-icon class="md-default">save</md-icon>
+		      </md-button>
+		    </md-toolbar>
+
+		</div>
+
+		<div class="listCampos">
+			<ul class="ulCampos">
+				<li class="itemCampos" v-for="(input,index) in inputs">
+					<input class="form-control" v-bind:style="input.validacion" :placeholder="input.placeholder" :type="input.type" v-model="input.value" @input="validarText(index,input.type)">
+
+					<div v-show="input.mostrar">
+						<md-field class="edita">
+					      <label>Editando</label>
+					      <md-input v-model="input.placeholder"></md-input>
+					    </md-field>
+
+					    <div class="md-layout md-gutter">
+						      <div class="md-layout-item">
+						        <md-field class="selec">
+						          <label for="type">Tipo de dato</label>
+						          <md-select v-model="input.type" name="type" id="type">
+						            <md-option value="text">Texto</md-option>
+						            <md-option value="number">Numerico</md-option>
+						            <md-option value="email">Correo</md-option>
+						        </md-field>
+						   	 </div>
+						   	 <md-button class="md-primary botonCerrar" @click="input.mostrar = false">
+					      	Cerrar
+					      </md-button>
+						</div>
+
+					</div>
+
+			        <div class="botones" v-show="!input.mostrar">
+			        	<md-button class="md-primary md-raised md-list-action" @click="mostrando(index)" >
+				          <!-- <md-icon class="-">create</md-icon> -->
+				          Editar
+				        </md-button>
+				        <md-button class="md-primary md-raised md-list-action" @click="delInput(index)" style="background-color: red">
+				          <!-- <md-icon class="md-primary">cancel</md-icon> -->
+				          Eliminar
+				        </md-button>
+			        </div>
+				</li>
+			</ul>
+		</div>
+
+		<md-dialog :md-active.sync="agregar">
+			<md-dialog-title>Agrega un nuevo campo</md-dialog-title>
+			<div class="nuevoInput">
+
+				<input  class="form-control" type="text" v-model="NuevoPlaeholder" placeholder="Nombre*" v-on:keyup.enter='aggInput'>
+				
+				<div class="md-layout md-gutter">
+			      <div class="md-layout-item">
+			        <md-field style="z-index:9999">
+			          <label for="type">Tipo de dato*</label>
+			          <md-select v-model="NuevoType" name="type" id="type">
+			            <md-option value="text">Texto</md-option>
+			            <md-option value="number">Numerico</md-option>
+			            <md-option value="email">Correo</md-option>
+			        </md-field>
+			   	 </div>
+				</div>
+
+				<md-button class="md-primary md-raised" @click="aggInput">Agregar</md-button>
+
+			<md-dialog-actions>
+				<md-button class="md-primary boton" @click="agregar = false">Cerrar</md-button>
+			</md-dialog-actions>
+		</md-dialog>
+
+		
+
+	</div>
+
+
+<?= $this->Html->script('vue-material.min') ?>
+<?= $this->Html->script('formulario') ?>

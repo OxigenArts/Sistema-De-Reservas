@@ -83,7 +83,7 @@ class AppController extends Controller
     {
        // parent::beforeFilter($event);
         //$this->Auth->allow(['login', 'view', 'display', 'index']);
-        $this->Auth->allow(['apirequest', 'message']);
+        $this->Auth->allow(['apirequest', 'message', 'send']);
         $this->set([
             'user' => $this->Auth->user()
         ]);

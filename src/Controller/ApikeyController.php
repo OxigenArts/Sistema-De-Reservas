@@ -204,6 +204,50 @@ class ApikeyController extends AppController
     ]);
 }
 
+    public function send() {
+        $this->loadModel("Reservation");
+        $response = [];
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+
+            $apikey = $data['apikey'];
+
+            if ($apikey) {
+                $apikeyRecord = $this->Apikey->find('all', [
+                    'conditions' => ['api_key' => $apikey]
+                ])->first();
+
+                if ($apikeyRecord) {
+                    $newReservation = $this->Reservation->newEntity();
+
+                    $requestJson = $data['json'];
+
+                    $newReservation->name = json_encode($requestJson);
+
+                    $newReservation->user_id = $apikeyRecord->user_id;
+
+                    $newReservation->status = "pending";
+
+                    $this->Reservation->save($newReservation);
+
+                    $response[] = ["success" => true, $newReservation];
+                    
+                } else {
+                    $response[] = ["error" => true, "message" => "Invalid apikey."];
+                }
+            } else {
+                $response[] = ["error" => true, "message" => "No apikey defined."];
+            }
+        } else {
+            $response[] = ["error" => true, "message" => "Invalid method."];
+        }
+
+        $this->set([
+            'reservation' => $response,
+            '_serialize' => ['reservation']
+        ]);
+    }
+
     /**
      * View method
      *

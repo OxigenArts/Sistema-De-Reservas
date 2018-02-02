@@ -31,7 +31,7 @@ class FormsController extends AppController
             'conditions' => ['user_id' => $this->Auth->user('id')]
         ]);
 
-        $this->set(['forms' => $forms, '_serialize' => 'forms']);
+        $this->set(['forms' => $forms->first(), '_serialize' => 'forms']);
     }
 
     /**
@@ -78,26 +78,25 @@ class FormsController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit()
     {
-        $form = $this->Forms->get($id, [
-            'contain' => []
-        ]);
+        $form = $this->Forms->find('all', [
+            'contain' => [],
+            'conditions' => ['user_id' => $this->Auth->user('id')]
+        ])->first();
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $form = $this->Forms->patchEntity($form, $this->request->getData());
             if ($this->Forms->save($form)) {
                 $this->Flash->success(__('The form has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                //return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The form could not be saved. Please, try again.'));
         }
-        $users = $this->Forms->Users->find('list', ['limit' => 200]);
-                $this->set(['forms' => $forms, '_serialize' => 'forms']);
+        
 
-        $this->set(['forms' => $forms, '_serialize' => 'forms',
-            'users' => $users, '_serialize' => 'users'
-    ]);
+        $this->set(['forms' => $forms, '_serialize' => 'forms']);
     }
 
     /**

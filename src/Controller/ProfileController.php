@@ -99,11 +99,11 @@ class ProfileController extends AppController
     {
         if ($this->Auth->user('role') == "admin" && $id != null) {
             $profile = $this->Profile->get($id, [
-                "contain" => ['Users', 'Photos']
+                "contain" => ['Users', 'Photos', 'Gallery']
             ]);
         } else {
             $profile = $this->Profile->find('all', [
-                'contain' => ['Users', 'Photos'],
+                'contain' => ['Users', 'Photos', 'Gallery'],
                 'conditions' => ['profile.user_id' => $this->Auth->user('id')]
             ])->first();
         }
@@ -113,12 +113,15 @@ class ProfileController extends AppController
             if ($this->Profile->save($profile)) {
                 $this->Flash->success(__('The profile has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                //return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The profile could not be saved. Please, try again.'));
         }
         $photos = $this->Profile->Photos->find('list', ['limit' => 200]);
         //$this->set(compact('profile', 'photos'));
+
+        //debug($profile);
+
         $this->set(['profile' => $profile,
             '_serialize' => 'profile'
     ]);
@@ -168,7 +171,7 @@ class ProfileController extends AppController
             }
             
         }
-        debug($userProfile->photo);
+        //debug($userProfile->photo);
         $this->set([
             'data' => $userProfile,
             'rData' => $rData,
@@ -177,6 +180,8 @@ class ProfileController extends AppController
         
 
     }
+
+
 
     public function isAuthorized($user)
     {

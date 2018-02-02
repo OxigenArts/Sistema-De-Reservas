@@ -27,9 +27,10 @@ class RoutinesController extends AppController
             );
         }
 
+
         
-        $this->set(['routines' => $routines,
-            '_serialize' => 'routines'
+        $this->set(['routine' => $routines->first(),
+            '_serialize' => 'routine'
     ]);
     }
 

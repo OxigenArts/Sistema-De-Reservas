@@ -54,18 +54,21 @@ class UsersController extends AppController
         $this->loadModel('Profile');
         $this->loadModel('Forms');
         $this->loadModel('Apikey');
+        $this->loadModel('Routines');
 
         $user = $this->Users->newEntity();
         $nuevaFoto = $this->Photos->newEntity();
         $newProfile = $this->Profile->newEntity();
         $newForm = $this->Forms->newEntity();
         $newApikey = $this->Apikey->newEntity();
-
+        $newRoutine = $this->Routines->newEntity();
 
         //$photo = $this->Photos->find('all')->first();
         $nuevaFoto->url = 'img/users/user-placeholder.png';
         $newApikey->api_key = "not generated";
 
+        
+    
         
                 
         if ($this->request->is('post')) {
@@ -76,13 +79,20 @@ class UsersController extends AppController
             //debug($user);
             if ($nuevoUsuario = $this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
+
                 $nuevaFoto->user_id = $nuevoUsuario->id;
                 $newProfile->user_id = $nuevoUsuario->id;
                 $newForm->user_id = $nuevoUsuario->id;
                 $this->Forms->save($newForm);
+
                 $foto_id = $this->Photos->save($nuevaFoto);
+
                 $newProfile->photo_id = $foto_id->id;
                 $newApikey->user_id = $nuevoUsuario->id;
+
+                $newRoutine->user_id = $nuevoUsuario->id;
+
+
                 $this->Profile->save($newProfile);
                 $this->Apikey->save($newApikey);
                 //return $this->redirect(['action' => 'index']);

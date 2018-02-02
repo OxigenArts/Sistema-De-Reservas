@@ -83,6 +83,15 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                             );
                         ?>
 
+                        <?=
+                            $this->Html->link(
+                                'Horario',
+                                '/routines',
+                                ['class' => 'mdl-navigation__link']
+                            );
+                        ?>
+
+
                             <?=
                             $this->Html->link(
                                 'Reservas',

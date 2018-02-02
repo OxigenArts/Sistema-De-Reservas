@@ -54,7 +54,7 @@ class ErrorController extends AppController
         parent::beforeRender($event);
 
         $this->viewBuilder()->setTemplatePath('Error');
-        return $this->redirect(['controller' => 'users', 'action' => 'login']);
+        //return $this->redirect(['controller' => 'users', 'action' => 'login']);
     }
 
 

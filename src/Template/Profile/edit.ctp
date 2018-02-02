@@ -42,15 +42,30 @@ $this->assign('title', "Editar perfil");
         <div class="mdl-cell mdl-cell--6-col">
             <h6>Geolocalizacion</h6>
             
-
-            <selector-map @locationUpdated="locationUpdated" :lat="profile_data.location.lat" :lon="profile_data.location.lng" style="width: 300px; height: 300px;">
-            </selector-map>
+            <div>
+                <selector-map @locationUpdated="locationUpdated" :lat="profile_data.location.lat" :lon="profile_data.location.lng" style="width: 300px; height: 300px;">
+                </selector-map>
+            </div>
+            
 
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" @click="save()">
                 Guardar
             </button>
         </div>
+        
+        <div class="mdl-cell mdl-cell--6-col">
+                <h6>Nombre público</h6>
+                <div class="mdl-textfield mdl-js-textfield">
+                    <input type="text" class="mdl-textfield__input" v-model.trim="profile_data.name">
+                    <label class="mdl-textfield__label" for="text">Nombre público</label>
 
+                </div>
+                <div>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" @click="addContact()">
+                        Guardar
+                    </button>
+                </div>
+        </div>
         
 
         <div class="mdl-cell mdl-cell--6-col">

@@ -50,26 +50,29 @@ class ApikeyController extends AppController
             $formData = $this->request->getData();
 
             $apiKey_external = $formData['apikey'];
-            
+            $apikey = $apiKey_external;
             if ($apiKey_external) {
                 $keyRecord = $this->Apikey->find('all', [
                     'conditions' => ['api_key' => $apiKey_external]
                 ])->first();
                 
                 
-                if ($keyRecord) {
+                if ($keyRecord && $apiKey_external != "not generated") {
                     
                     $profile = $this->Profile->find('all', [
                         'contain' => ['Photos'],
                         'conditions' => ['Profile.user_id' => $keyRecord->user_id]
                     ])->first();
-    
+                    
                     $form = $this->Forms->find('all', [
                         'conditions' => ['user_id' => $keyRecord->user_id]
                     ])->first();
 
+                    $user = $this->Users->get($keyRecord->user_id);
+
                     $data['profile'] = $profile;
                     $data['form'] = $form;
+                    $data['user'] = $user;
                     
                 } else {
                     $data[] = ['error' => 'Invalid api key'];
@@ -167,7 +170,7 @@ class ApikeyController extends AppController
     public function message() {
         $this->loadModel('Mesage');
         $status = [];
-        if ($this->request-is('post')) {
+        if ($this->request->is('post')) {
             $formData = $this->request->getData();
 
             $apiKey_external = $formData['apikey'];
@@ -181,7 +184,7 @@ class ApikeyController extends AppController
                 $newMessage = $this->Mesage->newEntity();
 
                 $newMessage->user_id = $keyRecord->user_id;
-                $newMessage->json = $formData['data'];
+                $newMessage->json = json_encode($formData['data']);
 
                 $this->Mesage->save($newMessage);
                 $status[] = ['success' => true];
@@ -297,9 +300,6 @@ class ApikeyController extends AppController
 
     public function isAuthorized($user)
     {
-        if (in_array($this->request->action, ['message', 'apirequest'])) {
-            return true;
-        }
 
         if ($this->Auth->user('role') == 'admin') {
             return true;

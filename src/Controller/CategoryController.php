@@ -125,6 +125,8 @@ class CategoryController extends AppController
         if ($this->Auth->user('role') == 'admin') {
             return true;
         }
+
+        return parent::isAuthorized($user);
         // By default deny access.
         
     }

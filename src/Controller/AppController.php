@@ -83,10 +83,30 @@ class AppController extends Controller
     {
        // parent::beforeFilter($event);
         //$this->Auth->allow(['login', 'view', 'display', 'index']);
-
+        $this->Auth->allow(['apirequest', 'message']);
         $this->set([
             'user' => $this->Auth->user()
         ]);
+    }
+
+    public function beforeRender(Event $event) {
+        //$this->response->header('Access-Control-Allow-Origin', '*');
+
+        $this->response->cors($this->request)
+            ->allowOrigin(['*'])
+            ->allowMethods(['GET', 'POST'])
+            ->allowHeaders(['X-CSRF-Token'])
+            ->allowCredentials()
+            ->exposeHeaders(['Link'])
+            ->maxAge(300)
+            ->build();
+
+    }
+
+    public function isAuthorized($user) {
+        if ($this->Auth->user('role') == 'admin') {
+            return true;
+        }
     }
 
 }

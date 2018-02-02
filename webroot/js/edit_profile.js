@@ -67,7 +67,9 @@ var editprofile = new Vue({
         this.fetch();
     },
     data: {
-        profile_data: {},
+        profile_data: {
+            
+        },
         formData: {},
         profile_photo: ""
     },
@@ -75,7 +77,18 @@ var editprofile = new Vue({
         fetch: function() {
             this.$http.get("../profile/edit.json").then(function(response) {
                 console.log(response);
-                this.profile_data = JSON.parse(response.body.json);
+                if (response.body.json == "") {
+                    this.profile_data = {
+                        location: {
+                            lat: -5.129491,
+                            lng: 1.203920
+                        }
+                    };
+                } else {
+                    this.profile_data = JSON.parse(response.body.json);
+                }
+
+                
                 this.profile_photo = response.body.photo.url;
                 //console.log(this.profile_data);
             });

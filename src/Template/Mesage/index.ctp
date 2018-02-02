@@ -9,8 +9,8 @@ $this->assign('title', "Mensajes de contacto");
             <thead>
                 <tr>
                     <th>Nombre</th>
+                    <th>Apellido</th>
                     <th>Correo</th>
-                    <th>Teléfono</th>
                     <th>Mensaje</th>
                     <th>Opciones</th>
                 </tr>
@@ -19,8 +19,8 @@ $this->assign('title', "Mensajes de contacto");
                 <tr v-for="date in tabledata">
                 
                     <td>{{date.json.name}}</td>
+                    <td>{{date.json.lastname}}</td>
                     <td>{{date.json.email}}</td>
-                    <td>{{date.json.phone}}</td>
                     <td>{{date.json.message}}</td>
                     <td>
                         <div>

@@ -71,7 +71,8 @@ var editprofile = new Vue({
             
         },
         formData: {},
-        profile_photo: ""
+        profile_photo: "",
+        gallery_photos: []
     },
     methods: {
         fetch: function() {
@@ -90,6 +91,7 @@ var editprofile = new Vue({
 
                 
                 this.profile_photo = response.body.photo.url;
+                this.gallery_photos = response.body.gallery;
                 //console.log(this.profile_data);
             });
         },
@@ -136,6 +138,26 @@ var editprofile = new Vue({
                 }
             }).then(function(response) {
                 console.log(response);
+                this.fetch();
+            });
+        },
+        addToGallery: function(data) {
+            var photo = this.$refs.newGalleryPhoto.files[0];
+            var formData = new FormData();
+
+            formData.append('url', photo, guid()+'.jpg');
+            this.$http.post('addtogallery.json', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(function(response) {
+                console.log("addToGallery: ",response);
+                this.fetch();
+            });
+        },
+        removeFromGallery: function(id) {
+            this.$http.post("removefromgallery/"+id+".json").then(function(response) {
+                console.log("removeFromGallery: ", response);
                 this.fetch();
             });
         },

@@ -66,6 +66,24 @@ $this->assign('title', "Editar perfil");
                     </button>
                 </div>
         </div>
+
+        <div class="mdl-cell mdl-cell--6-col">
+                <h6>Fotos de la galería</h6>
+                <div class="mdl-grid">
+                    <div class="mdl-cell mdl-cell--4-col" v-for="photo in gallery_photos">
+                        <div class="tinyimage" :style="'background-image: url(../'+photo.url+')'">
+                            <i class="material-icons" @click="removeFromGallery(photo.id)">delete</i>
+                        </div>
+                    </div>
+                    <div class="mdl-cell mdl-cell--4-col">
+                        <label for="newGalleryPhoto">
+                        <i class="material-icons addIcon">add</i>
+                        </label>
+                        
+                        <input type="file" style="display:none;" id="newGalleryPhoto" ref="newGalleryPhoto" @change="addToGallery">
+                    </div>
+                </div>
+        </div>
         
 
         <div class="mdl-cell mdl-cell--6-col">

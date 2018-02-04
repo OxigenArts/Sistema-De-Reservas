@@ -6,7 +6,7 @@ var table = new Vue({
             window.location.href[window.location.length-1] = "";
             window.location.replace(window.location.href);
         }
-        this.refreshTable();
+        //this.refreshTable();
 
     },
     data: {

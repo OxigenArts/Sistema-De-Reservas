@@ -51,7 +51,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
     <body>
         <?php //debug($user); ?>
-        <?= $this->Flash->render() ?>
+        
             <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
                 <header class="mdl-layout__header">
                     <div class="mdl-layout__header-row">
@@ -146,6 +146,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             </div>
 
             <footer>
+            <?= $this->Flash->render() ?>
             </footer>
     </body>
 

@@ -181,6 +181,59 @@ class ProfileController extends AppController
 
     }
 
+    public function addtogallery() {
+        $this->loadModel("Gallery");
+        $res = [];
+        if ($this->request->is('post')) {
+            
+            $rData = $this->request->getData();
+            if (move_uploaded_file($rData['url']['tmp_name'], WWW_ROOT . "img/gallery/".$rData['url']['name'])) {
+                $newPhoto = $this->Gallery->newEntity();
+
+                $profile = $this->Profile->find('all', [
+                    'conditions' => ['user_id' => $this->Auth->user('id')]
+                ])->first()->id;
+                $newPhoto->profile_id = $profile;
+                $newPhoto->url = "img/gallery/".$rData['url']['name'];
+
+                $res[] = $this->Gallery->save($newPhoto);
+            }
+            
+        }
+
+        $this->set([
+            'gallery' => $res,
+            '_serialize' => ['gallery']
+        ]);
+    }
+
+    public function removeFromGallery($id = null) {
+        $this->loadModel('Gallery');
+
+        $res = [];
+        if ($this->request->is('post')) {
+            $gal = $this->Gallery->get($id);
+
+            $prof = $this->Profile->get($gal->profile_id);
+            if ($this->Auth->user('role') == "admin" || $prof->user_id == $this->Auth->user('id')) {
+                $galUrl = $gal->url;
+                if ($this->Gallery->delete($gal)) {
+                    unlink(WWW_ROOT . $galUrl);
+                    $res[] = ['success' => true];
+                } else {
+                    $res[] = ['success' => false, 'message' => 'Cannot delete this image. Sorry.'];
+                }
+            } else {
+                $res[] = ['success' => false, 'message' => 'You dont have permissions for this!'];
+            }
+        }
+
+        $this->set([
+            'res' => $res,
+            '_serialize' => ['res']
+        ]);
+    }
+
 
 
     public function isAuthorized($user)
@@ -190,7 +243,7 @@ class ProfileController extends AppController
         }
 
         if($this->Auth->user('role') == 'user'){
-            if (in_array($this->request->action, ['edit', 'uploadprofilephoto'])) {
+            if (in_array($this->request->action, ['edit', 'uploadprofilephoto', 'addtogallery', 'removefromgallery'])) {
                 return true;
             }
             

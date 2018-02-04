@@ -129,7 +129,7 @@ class ApikeyController extends AppController
                 if ($keyRecord) {
                     
                     $profile = $this->Profile->find('all', [
-                        'contain' => ['Photos'],
+                        'contain' => ['Photos', 'Gallery'],
                         'conditions' => ['Profile.user_id' => $keyRecord->user_id]
                     ])->first();
     

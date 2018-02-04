@@ -10,3 +10,58 @@
     width: 300px !important;
     height: 300px !important;
 }
+
+.tinyimage {
+    width: 50px; 
+    height: 50px;
+    transition: all 0.5s ease;
+    background-position: center;
+    background-size: contain;
+}
+
+.tinyimage i {
+    visibility: hidden;
+    color: red;
+    font-size: 0px;
+    transition: all 0.6s ease;
+    padding: 2px;
+    user-select: none;
+}
+
+.tinyimage:hover {
+    width: 100px; 
+    height: 100px;
+}
+
+.tinyimage:hover i {
+    visibility: visible;
+    font-size: 20px;
+    background-color: rgb(202, 202, 202);
+    border-radius: 99px;
+}
+
+.tinyimage:hover i:active {
+    background-color: rgb(163, 163, 163);
+    transition: all 0.7s ease;
+}
+
+.addIcon {
+    color: green;
+    background-color: rgb(202, 202, 202);
+    font-size: 50px;
+    transition: all 0.3s ease;
+    margin: auto;
+    padding: 10px;
+    border-radius: 99px;
+    user-select: none;
+}
+
+.addIcon:hover {
+    background-color: rgb(156, 156, 156);
+    font-size: 55px;
+}
+
+.addIcon:hover {
+    color: #009e00;
+    background-color: rgb(156, 156, 156);
+}

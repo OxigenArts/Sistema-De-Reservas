@@ -19,27 +19,7 @@ class ApikeyController extends AppController
      * @return \Cake\Http\Response|void
      */
     public function index()
-    {	/*$this->loadModel('Profile');
-    	$this->loadModel('Forms');
-        $this->paginate = [
-            'contain' => ['Users']
-        ];
-        $profile = '';
-        $forms = '';
-        $apikey = $this->paginate($this->Apikey);
-        if($this->Auth->user('role') == 'admin'){
-        	$users = $this->Apikey->Users->find('all', ['limit' => 200]);
-        }else{
-        	$users = $this->Apikey->Users->find('all', ['conditions' => ['user_id' => $this->Auth->user('id')]]);
-        	$profile = $this->Profile->find('all', ['conditions' => ['user_id' => $this->Auth->user('id')]]);
-        	$forms = $this->Forms->find('all', ['conditions' => ['user_id' => $this->Auth->user('id')]]);
-        }
-        //debug($profile);
-
-        debug($profile);*/
-
-        
-
+    {	
         $this->loadModel('Profile');
         $this->loadModel('Forms');
         $this->loadModel("Users");
@@ -99,12 +79,6 @@ class ApikeyController extends AppController
                     'apikey' => $apikey,
                     'title' => "Llave de acceso",
                     '_serialize' => ['data', 'apikey']]);
-                    
-
-
-        
-       /* $this->set(['apikey' => $apikey, '_serialize' => 'apikey', 'users' => $users, '_serialize' => 'users', 'profile' => $profile, '_serialize' => 'profile', 'forms' => $forms, '_serialize' => 'forms'
-    ]);*/
     
     }
 
@@ -112,7 +86,8 @@ class ApikeyController extends AppController
         $this->loadModel('Profile');
         $this->loadModel('Forms');
         $this->loadModel("Users");
-
+        $this->loadModel("Routines");
+        $this->loadModel("Backgroundphotos");
         $data = [];
         $apikey = '';
         if ($this->request->is('post')) {
@@ -124,6 +99,9 @@ class ApikeyController extends AppController
                 $keyRecord = $this->Apikey->find('all', [
                     'conditions' => ['api_key' => $apiKey_external]
                 ])->first();
+                
+
+                $user = $this->Users->get($keyRecord->user_id);
                 
                 
                 if ($keyRecord) {
@@ -137,8 +115,17 @@ class ApikeyController extends AppController
                         'conditions' => ['user_id' => $keyRecord->user_id]
                     ])->first();
 
+                    $routine = $this->Routines->find('all', [
+                        'conditions' => ['user_id' => $keyRecord->user_id]
+                    ])->first();
+
+                    $profile->bgphoto = $this->Backgroundphotos->find('all', [
+                        'conditions' => ['user_id' => $keyRecord->user_id]
+                    ])->first();
+
                     $data['profile'] = $profile;
                     $data['form'] = $form;
+                    $data['routine'] = $routine;
                     
                 } else {
                     $data[] = ['error' => 'Invalid api key'];
@@ -312,11 +299,13 @@ class ApikeyController extends AppController
             if ($this->Apikey->save($apikey)) {
                 $this->Flash->success(__('The apikey has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                //return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The apikey could not be saved. Please, try again.'));
+        } else {
+            return $this->redirect(['action' => 'index']);
         }
-        $users = $this->Apikey->Users->find('all', ['limit' => 200]);
+        //$users = $this->Apikey->Users->find('all', ['limit' => 200]);
         //debug($apikey);
         $this->set(['apikey' => $apikey, '_serialize' => 'apikey'//, 'users' => $users, '_serialize' => 'users'
     ]);
@@ -357,7 +346,6 @@ class ApikeyController extends AppController
         }else{
             return parent::isAuthorized($user);
         }
-        // By default deny access.
         
     }
 }

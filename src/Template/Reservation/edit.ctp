@@ -3,11 +3,14 @@
 $this->assign('title', "Reservaciones");
 
 ?>
+<script src="https://moment.github.io/luxon/global/luxon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-datetime@1.0.0-beta.3/dist/vue-datetime.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-datetime@1.0.0-beta.3/dist/vue-datetime.min.css">
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header" id="edit">
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row" style="padding: 0;">
             <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="..">
+                <a class="mdl-navigation__link" href="../../reservation">
                     <i class="material-icons">keyboard_arrow_left</i> Volver
                 </a>
             </nav>
@@ -71,11 +74,14 @@ $this->assign('title', "Reservaciones");
                             <h2 class="mdl-card__title-text">Datos de horario</h2>
                         </div>
                         <div class="mdl-card__supporting-text">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sagittis pellentesque lacus eleifend lacinia...
+                            <h6>Fecha</h1>
+                            <datetime v-model="reservation_data.name.date"></datetime>
+                            <h6>Hora</h1>
+                            <input v-model="prehour" type="text">
                         </div>
                         <div class="mdl-card__actions mdl-card--border">
-                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                                Get Started
+                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" :onclick="'editreservation.save()'">
+                                Guardar
                             </a>
                         </div>
                     </div>
@@ -86,6 +92,11 @@ $this->assign('title', "Reservaciones");
         </div>
     </main>
 </div>
+<style>
+.vdatetime-overlay {
+    display: none !important;
+}
+</style>
 <?= $this->Html->script("edit_reservation") ?>
     <script>
         editreservation.setId(<?= $reservation->id ?>);

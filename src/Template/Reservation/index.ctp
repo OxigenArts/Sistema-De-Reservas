@@ -9,7 +9,10 @@ $this->assign('title', "Reservaciones");
             <tr>
                 <th>Identificador</th>
                 <th>Datos</th>
+                <th>Mensaje</th>
                 <th>Estado</th>
+                <th>Fecha</th>
+                <th>Hora</th>
                 <th>Opciones</th>
             </tr>
         </thead>
@@ -25,9 +28,18 @@ $this->assign('title', "Reservaciones");
                     </p>
                 </td>
                 <td>
+                    {{date.name.msg}}
+                </td>
+                <td>
                     <p :class="date.status">
                         {{date.status}}
                     </p>
+                </td>
+                <td>
+                    {{dateFormatted(date.name.date)}}
+                </td>
+                <td>
+                    {{date.name.time.hour}}:{{date.name.time.minute}}
                 </td>
                 <td>
                     <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" :onclick="'table.delete('+date.id+')'">

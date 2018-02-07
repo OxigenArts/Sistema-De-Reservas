@@ -8,6 +8,7 @@ function guid() {
       s4() + '-' + s4() + s4() + s4();
   }
 
+var Photoshop = VueColor.Chrome;
 
 
 
@@ -65,33 +66,79 @@ var editprofile = new Vue({
     el: "#edit",
     created: function() {
         this.fetch();
+        moment().locale('es');
+    },
+    components: {
+        'color-picker':Photoshop
     },
     data: {
         profile_data: {
-            
         },
         formData: {},
         profile_photo: "",
-        gallery_photos: []
+        gallery_photos: [],
+        background_photo: ""
     },
     methods: {
         fetch: function() {
             this.$http.get("../profile/edit.json").then(function(response) {
                 console.log(response);
-                if (response.body.json == "") {
+                if (response.body.profile.json == "") {
                     this.profile_data = {
                         location: {
                             lat: -5.129491,
                             lng: 1.203920
+                        },
+                        toolbar: {
+                            color: {
+                                hex: '#194d33',
+                                hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
+                                hsv: { h: 150, s: 0.66, v: 0.30, a: 1 },
+                                rgba: { r: 25, g: 77, b: 51, a: 1 },
+                                a: 1
+                            },
+                            textcolor: {
+                                hex: '#194d33',
+                                hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
+                                hsv: { h: 150, s: 0.66, v: 0.30, a: 1 },
+                                rgba: { r: 25, g: 77, b: 51, a: 1 },
+                                a: 1
+                            }
                         }
                     };
                 } else {
-                    this.profile_data = JSON.parse(response.body.json);
+                    this.profile_data = JSON.parse(response.body.profile.json);
+                    if (!this.profile_data.toolbar) {
+                        this.profile_data.toolbar = {
+                            color: {
+                                hex: '#194d33',
+                                hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
+                                hsv: { h: 150, s: 0.66, v: 0.30, a: 1 },
+                                rgba: { r: 25, g: 77, b: 51, a: 1 },
+                                a: 1
+                            },
+                            textcolor: {
+                                hex: '#194d33',
+                                hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
+                                hsv: { h: 150, s: 0.66, v: 0.30, a: 1 },
+                                rgba: { r: 25, g: 77, b: 51, a: 1 },
+                                a: 1
+                            }
+                        }
+
+                        this.save();
+                    }
+
+                    
                 }
 
                 
-                this.profile_photo = response.body.photo.url;
-                this.gallery_photos = response.body.gallery;
+                this.profile_photo = response.body.profile.photo.url;
+                
+                if (response.body.profile.bgphoto) {
+                    this.background_photo = response.body.profile.bgphoto.url;
+                }
+                this.gallery_photos = response.body.profile.gallery;
                 //console.log(this.profile_data);
             });
         },
@@ -133,6 +180,20 @@ var editprofile = new Vue({
             var formData = new FormData();
             formData.append('url', photo, guid()+'.jpg');
             this.$http.post("uploadprofilephoto.json", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(function(response) {
+                console.log(response);
+                this.fetch();
+            });
+        },
+        setBackgroundPhoto: function(data) {
+            console.log("hello world");
+            var photo = this.$refs.backgroundPhoto.files[0];
+            var formData = new FormData();
+            formData.append('url', photo, guid()+'.jpg');
+            this.$http.post("uploadbackgroundphoto.json", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

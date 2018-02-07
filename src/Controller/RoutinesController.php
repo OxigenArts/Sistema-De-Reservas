@@ -27,9 +27,42 @@ class RoutinesController extends AppController
             );
         }
 
+        if ($this->request->is('post')) {
+            $userRoutine = $this->Routines->find('all', [
+                'conditions' => ['user_id' => $this->Auth->user('id')]
+            ])->first();
+
+            if (!$userRoutine) {
+                $userRoutine = $this->Routines->newEntity();
+                $userRoutine->user_id = $this->Auth->user('id');
+                $userRoutine->json = "";
+            }
+            
+            
+            $requestData = $this->request->getData();
+
+            $json = $requestData['json'];
+            
+            $routineJson = "";
+
+            if ($userRoutine->json != "" && $userRoutine->json != NULL) {
+                $routineJson = json_decode($userRoutine->json, true);
+            } else {
+                $routineJson = ['routine' => []];
+            }
+
+            $routineJson['routine'] = $json;
+
+            $userRoutine->json = json_encode($routineJson);
+            
+            $this->Routines->save($userRoutine);
+
+        }
+
 
         
         $this->set(['routine' => $routines->first(),
+        'vue_disabled' => true,
             '_serialize' => 'routine'
     ]);
     }

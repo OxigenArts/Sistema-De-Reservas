@@ -54,7 +54,7 @@ class AppController extends Controller
             'controller' => 'Users',
             'action' => 'login'
             ],
-            'authError' => 'Did you really think you are allowed to see that?',
+            'authError' => '¿Realmente pensaste que tenías permiso para eso?',
             'loginRedirect' => [
             'controller' => 'reservation',
             'action' => 'index'

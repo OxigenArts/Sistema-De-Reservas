@@ -20,7 +20,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
     <head>
         <?= $this->Html->charset() ?>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>
                 Dashboard:
                 <?= $this->fetch('title') ?>
@@ -32,21 +31,32 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 <?= $this->fetch('meta') ?>
                     <?= $this->fetch('css') ?>
                         <?= $this->fetch('script') ?>
+
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/es.js"></script>
+                            <?php if(!isset($vue_disabled)) : ?>
                             <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
                             <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
                             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                            <script src="https://cdn.jsdelivr.net/npm/vue"></script>
                             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
                             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-                            <script src="https://cdn.jsdelivr.net/npm/vue"></script>
                             <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.5"></script>
                             <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
                             <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+                            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.9/dialog-polyfill.min.css">
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.9/dialog-polyfill.min.js"></script>
+                            <?php endif; ?>
+                            
+                            
+                            
                             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
                             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
                             <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
                             <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-                            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.9/dialog-polyfill.min.css">
-                            <script src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.9/dialog-polyfill.min.js"></script>
+                            
+                            
+                            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     </head>
 
     <body>

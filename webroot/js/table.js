@@ -75,6 +75,9 @@ var table = new Vue({
                 console.log(response);
                 this.refreshTable();
             })
+        },
+        dateFormatted: function(date) {
+            return moment(date).format('dddd, MMMM Do YYYY');
         }
     }
 });

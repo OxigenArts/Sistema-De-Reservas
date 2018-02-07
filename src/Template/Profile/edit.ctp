@@ -15,12 +15,28 @@ $this->assign('title', "Editar perfil");
             
                 <label for="photo">
                         <p>
-                            Cambiar foto
+                            Cambiar foto de perfil
                         </p>
                 </label>
             
             <?php echo $this->Form->input('photo', ['type' => 'file', "@change" => "setPhoto", "ref" => "profilePhoto", "label" => false, "style" => "visibility: hidden;"]); ?>
         </div>
+
+        <div class="mdl-cell mdl-cell--6-col">
+            <h6>Foto de fondo</h6>
+            <div>
+                <img :src="'../'+background_photo" style="width: 200px; height: 200px; margin: auto;"/>
+            </div>
+            
+                <label for="bgphoto">
+                        <p>
+                            Cambiar foto de fondo
+                        </p>
+                </label>
+            
+            <?php echo $this->Form->input('bgphoto', ['type' => 'file', "@change" => "setBackgroundPhoto", "ref" => "backgroundPhoto", "label" => false, "style" => "visibility: hidden;"]); ?>
+        </div>
+
 
         
         
@@ -84,7 +100,28 @@ $this->assign('title', "Editar perfil");
                     </div>
                 </div>
         </div>
-        
+        <div class="mdl-cell mdl-cell--6-col">
+                <h6>Color del toolbar</h6>
+                
+                <div>
+                <color-picker v-model="profile_data.toolbar.color" />
+                </div>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" @click="addContact()">
+                        Guardar
+                    </button>
+        </div>
+
+        <div class="mdl-cell mdl-cell--6-col">
+                <h6>Color del text del toolbar</h6>
+                
+                <div>
+                <color-picker v-model="profile_data.toolbar.textcolor" />
+                </div>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" @click="addContact()">
+                        Guardar
+                    </button>
+        </div>
+
 
         <div class="mdl-cell mdl-cell--6-col">
             <h6>Datos de contacto</h6>
@@ -127,4 +164,5 @@ $this->assign('title', "Editar perfil");
 
     </div>
 
-    <?= $this->Html->script("edit_profile") ?>
+<?= $this->Html->script('vue-color.min.js') ?>
+<?= $this->Html->script("edit_profile") ?>

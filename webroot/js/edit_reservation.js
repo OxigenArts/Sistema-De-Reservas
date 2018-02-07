@@ -17,7 +17,8 @@ var editreservation = new Vue({
         reservation_data: {},
         formData: {},
         editing: {},
-        id: 0
+        id: 0,
+        prehour: ""
     },
     methods: {
         fetch: function() {
@@ -28,10 +29,20 @@ var editreservation = new Vue({
                 for (var a in this.reservation_data.name.data) {
                     this.editing[a] = false;
                 }
+
+                this.prehour = this.reservation_data.name.time.hour + ":" + this.reservation_data.name.time.minute;
                 console.log(this.reservation_data);
             });
         },
         save: function() {
+            var timeObj = {
+                time: {
+                    hour: moment(this.prehour, 'H:mm').hour(),
+                    minute: moment(this.prehour, 'H:mm').minute()
+                }
+            };
+
+            this.reservation_data.name.time = timeObj.time;
             this.$http.post("../edit/"+this.id+".json", {name: JSON.stringify(this.reservation_data.name)}).then(function(response) {
                 this.fetch();
             })

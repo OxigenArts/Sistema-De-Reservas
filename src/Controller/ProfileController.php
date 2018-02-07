@@ -97,6 +97,7 @@ class ProfileController extends AppController
      */
     public function edit($id = null)
     {
+        $this->loadModel("Backgroundphotos");
         if ($this->Auth->user('role') == "admin" && $id != null) {
             $profile = $this->Profile->get($id, [
                 "contain" => ['Users', 'Photos', 'Gallery']
@@ -119,11 +120,15 @@ class ProfileController extends AppController
         }
         $photos = $this->Profile->Photos->find('list', ['limit' => 200]);
         //$this->set(compact('profile', 'photos'));
+        $bgphoto = $this->Backgroundphotos->find('all', [
+            'conditions' => ['user_id' => $this->Auth->user('id')]
+        ])->first();
 
+        $profile->bgphoto = $bgphoto;
         //debug($profile);
 
         $this->set(['profile' => $profile,
-            '_serialize' => 'profile'
+            '_serialize' => ['profile']
     ]);
     }
 
@@ -180,6 +185,43 @@ class ProfileController extends AppController
         
 
     }
+
+    public function uploadbackgroundphoto() {
+        $this->loadModel("Backgroundphotos");
+        $photo = [];
+        if ($this->request->is('post')) {
+            $rData = $this->request->getData();
+            if (move_uploaded_file($rData['url']['tmp_name'], WWW_ROOT . "img/users/".$rData['url']['name'])) {
+
+                $photo = $this->Backgroundphotos->find('all',[
+                    'conditions' => ['user_id' => $this->Auth->user('id')]
+                ])->first();
+
+                if ($photo) {
+                    $photo->url = "img/users/".$rData['url']['name'];
+                    $this->Backgroundphotos->save($photo);
+                } else {
+                    $newPhoto = $this->Backgroundphotos->newEntity();
+                    $newPhoto->user_id = $this->Auth->user('id');
+                    $newPhoto->url = "img/users/".$rData['url']['name'];
+                    $this->Backgroundphotos->save($newPhoto);
+                }
+
+
+                
+            }
+            
+        }
+        //debug($userProfile->photo);
+        $this->set([
+            'data' => $photo,
+            'rData' => $rData,
+            '_serialize' => ['data', 'rData']
+        ]);
+        
+
+    }
+
 
     public function addtogallery() {
         $this->loadModel("Gallery");
@@ -243,7 +285,7 @@ class ProfileController extends AppController
         }
 
         if($this->Auth->user('role') == 'user'){
-            if (in_array($this->request->action, ['edit', 'uploadprofilephoto', 'addtogallery', 'removefromgallery'])) {
+            if (in_array($this->request->action, ['edit', 'uploadprofilephoto', 'uploadbackgroundphoto' , 'addtogallery', 'removefromgallery'])) {
                 return true;
             }
             

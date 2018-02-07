@@ -210,7 +210,7 @@ class ReservationController extends AppController
                 }
 
                 if ($email_added_2 != NULL) {
-                    $mail = $reservationData['Email'];
+                    $mail = $reservationData['Correo'];
                     $email->from(['test@oxigenarts.net' => 'TestMessage'])
                     ->to("$mail")
                     ->subject('Solicitud aceptada')

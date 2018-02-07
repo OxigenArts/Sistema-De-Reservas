@@ -201,7 +201,7 @@ class ReservationController extends AppController
                 
 
 
-                if ($email_added_1 != NULL && $owner_email_1 != NULL) {
+                if ($email_added_1 != NULL) {
                     $mail = $reservationData['Email'];
                     $email->from(['test@oxigenarts.net' => 'TestMessage'])
                     ->to("$mail")
@@ -209,7 +209,7 @@ class ReservationController extends AppController
                     ->send(json_encode($routineJson['blocked']));
                 }
 
-                if ($email_added_2 != NULL && $owner_email_2 != NULL) {
+                if ($email_added_2 != NULL) {
                     $mail = $reservationData['Email'];
                     $email->from(['test@oxigenarts.net' => 'TestMessage'])
                     ->to("$mail")
